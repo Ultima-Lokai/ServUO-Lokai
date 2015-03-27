@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Server;
-using Server.Gumps;
-using Server.Network;
-using Server.Commands;
 using Server.Mobiles;
-
 using VitaNex.SuperGumps;
 
 namespace Server.Gumps.Compendium
@@ -72,8 +66,11 @@ namespace Server.Gumps.Compendium
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Bad CompendiumPageGump link");
-                    Console.WriteLine(e);
+                    if (Compendium.LOG_ERRORS)
+                    {
+                        Console.WriteLine("Bad CompendiumPageGump link");
+                        Console.WriteLine(e);
+                    }
                     this.Refresh();
                 }
             }
@@ -107,8 +104,11 @@ namespace Server.Gumps.Compendium
             }
             catch (Exception e)
             {
-                Console.WriteLine("An exception was caught while trying to edit Compendium page.");
-                Console.WriteLine(e);
+                if (Compendium.LOG_ERRORS)
+                {
+                    Console.WriteLine("An exception was caught while trying to edit Compendium page.");
+                    Console.WriteLine(e);
+                }
             }
         }
     }

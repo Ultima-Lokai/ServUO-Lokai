@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
-
 using Server.Commands;
-using Server.Gumps;
 
 namespace Server.Gumps.Compendium
 {
@@ -39,6 +34,8 @@ namespace Server.Gumps.Compendium
         public const string COMPENDIUM_ROOT_FOLDER_NAME = "Compendium";
         public const string YELLOW_TEXT_WEB_COLOR = "#FDBF3E";
         public const string CONTENT_TEXT_WEB_COLOR = "#111111";
+        public const bool LOG_MESSAGES = false;
+        public const bool LOG_ERRORS = true;
 
         public static Dictionary<string, CompendiumPageRenderer> g_CompendiumRenderers = new Dictionary<string, CompendiumPageRenderer>();
 

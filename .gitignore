@@ -16,3 +16,8 @@
 /EmergencyBackup/EmergencyBackup.csproj.user
 /Backups
 /ServUO.v12.suo
+*.bin
+*.opt
+VitaNexCore/Cache/States/Server.Misc.AntiAdverts.state
+*.state
+VitaNexCore/FirstBoot.vnc

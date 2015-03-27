@@ -1,10 +1,4 @@
-﻿using System;
-using Server;
-using Server.Gumps;
-using Server.Network;
-using Server.Commands;
-using Server.Mobiles;
-
+﻿
 using VitaNex.SuperGumps;
 
 namespace Server.Gumps.Compendium

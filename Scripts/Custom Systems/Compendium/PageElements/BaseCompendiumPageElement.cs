@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using Server.Gumps;
 
 namespace Server.Gumps.Compendium
 {
@@ -43,6 +41,7 @@ namespace Server.Gumps.Compendium
 
         //element name, delegate to create class type
         private static Dictionary<string, CreateCompendiumElementMethod> g_registeredElements = new Dictionary<string, CreateCompendiumElementMethod>();
+
         public static void RegisterElement(string elementName, CreateCompendiumElementMethod factoryMethod)
         {
             if (!g_registeredElements.ContainsKey(elementName))
@@ -51,7 +50,8 @@ namespace Server.Gumps.Compendium
             }
             else
             {
-                Console.WriteLine("Error Registering CompendiumPageElement.  That element name has been taken.");
+                if (Compendium.LOG_MESSAGES)
+                    Console.WriteLine("Error Registering CompendiumPageElement.  That element name has been taken.");
             }
         }
 
@@ -68,7 +68,8 @@ namespace Server.Gumps.Compendium
             }
             else
             {
-                Console.WriteLine("Cannot create Compendium Element ({0}), it was not registered.", elementType);
+                if (Compendium.LOG_MESSAGES)
+                    Console.WriteLine("Cannot create Compendium Element ({0}), it was not registered.", elementType);
             }
 
             return elementToReturn;

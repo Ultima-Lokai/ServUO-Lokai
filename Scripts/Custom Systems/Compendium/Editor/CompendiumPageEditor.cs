@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Server.Commands;
-using Server.Gumps;
-using Server.Network;
+using Server.Custom;
 using Server.Mobiles;
 using Server.Items;
 
@@ -175,7 +174,11 @@ namespace Server.Gumps.Compendium
             }
             else
             {
-                Console.WriteLine("That Compendium Page Element has already been registered! " + elementType.ToString());
+                if (Compendium.LOG_MESSAGES)
+                {
+                    Console.WriteLine("That Compendium Page Element has already been registered! " +
+                                      elementType.ToString());
+                }
             }
         }
 
@@ -187,7 +190,10 @@ namespace Server.Gumps.Compendium
 
             if (state == null)
             {
-                Console.WriteLine("Editor State was null");
+                if (Compendium.LOG_ERRORS)
+                {
+                    Console.WriteLine("Editor State was null");
+                }
                 return;
             }
             else
@@ -276,8 +282,24 @@ namespace Server.Gumps.Compendium
                         {
                             if (properties[i].Callback != null)
                             {
-                                AddBackground(130, propertiesStartingY, 120, 20, 9350);
-                                AddTextEntry(134, propertiesStartingY, 137, 20, 0, properties[i].Callback, properties[i].Text);
+                                int bgWidth = 120;
+                                int entryWidth = 137;
+                                int number;
+                                int.TryParse(properties[i].Text, out number);
+                                if (properties[i].Display.ToLower().Contains("gump"))
+                                {
+                                    bgWidth -= 20;
+                                    entryWidth -= 20;
+                                    AddButton(231, propertiesStartingY, 0x8B0, 0x8B0, GumpButtonType.Reply, onBrowseItemButtonClick, number);
+                                }
+                                else if (properties[i].Display.ToLower().Contains("item"))
+                                {
+                                    bgWidth -= 20;
+                                    entryWidth -= 20;
+                                    AddButton(231, propertiesStartingY, 0x8B0, 0x8B0, GumpButtonType.Reply, onBrowseImageButtonClick, number);
+                                }
+                                AddBackground(130, propertiesStartingY, bgWidth, 20, 9350);
+                                AddTextEntry(134, propertiesStartingY, entryWidth, 20, 0, properties[i].Callback, properties[i].Text);
                             }
                         }
                         break;
@@ -393,6 +415,28 @@ namespace Server.Gumps.Compendium
             #endregion
 
             AddButton(250, 15, 5003, 5003, GumpButtonType.Reply, onGumpCloseButtonClick); //Browser Close Button
+        }
+
+        public void onBrowseItemButtonClick(IGumpComponent gumpComponent, object param)
+        {
+            GumpButton button = gumpComponent as GumpButton;
+
+            if (button != null)
+            {
+                if (button.Param > -1)
+                    EditorState.Caller.SendGump(new SearchImageGump(button.Param, "ALL"));
+            }
+        }
+
+        public void onBrowseImageButtonClick(IGumpComponent gumpComponent, object param)
+        {
+            GumpButton button = gumpComponent as GumpButton;
+
+            if (button != null)
+            {
+                if (button.Param > -1)
+                    EditorState.Caller.SendGump(new SearchImageGump(button.Param, "ALL"));
+            }
         }
 
         public void onOpenGridButtonClick(IGumpComponent gumpComponent, object param)

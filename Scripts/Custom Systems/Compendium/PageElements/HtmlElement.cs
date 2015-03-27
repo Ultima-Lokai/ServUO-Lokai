@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-
-using Server.Items;
-using Server.Gumps;
 
 namespace Server.Gumps.Compendium
 {

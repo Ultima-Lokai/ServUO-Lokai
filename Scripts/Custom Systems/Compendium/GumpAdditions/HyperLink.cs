@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Xml;
 using System.Reflection;
-
-using Server;
-using Server.Gumps;
-using Server.Network;
-using Server.Commands;
 
 namespace Server.Gumps
 {

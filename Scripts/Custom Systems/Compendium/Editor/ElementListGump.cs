@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-
-using Server.Commands;
-using Server.Gumps;
-using Server.Network;
-
 using VitaNex.SuperGumps;
 
 namespace Server.Gumps.Compendium
@@ -200,8 +194,11 @@ namespace Server.Gumps.Compendium
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("An exception was caught while trying to delete a compendium element");
-                    Console.WriteLine(e);
+                    if (Compendium.LOG_ERRORS)
+                    {
+                        Console.WriteLine("An exception was caught while trying to delete a compendium element");
+                        Console.WriteLine(e);
+                    }
                 }
             }
 
