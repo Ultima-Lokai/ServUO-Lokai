@@ -72,6 +72,7 @@ namespace Server.Gumps
             int buttonBase = m_Page*100000;
             int index = 1;
 
+
             for (int xpos = 16; xpos < 393; xpos += 4)
             {
                 for (int ypos = 16; ypos < 393; ypos += 4)
@@ -147,6 +148,30 @@ namespace Server.Gumps
 
             m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y));
 
+        }
+    }
+
+    public class ShardTravelEntry
+    {
+        private string m_Name;
+        private Point3D m_Destination;
+        private Map m_Map;
+        private int m_Xpos;
+        private int m_Ypos;
+
+        public string Name { get { return m_Name; } }
+        public Point3D Destination { get { return m_Destination; } }
+        public Map Map { get { return m_Map; } }
+        public int Xpos { get { return m_Xpos; } set { m_Xpos = value; } }
+        public int Ypos { get { return m_Ypos; } set { m_Ypos = value; } }
+
+        public ShardTravelEntry(string name, Point3D p, Map map, int xpos, int ypos)
+        {
+            m_Name = name;
+            m_Destination = p;
+            m_Map = map;
+            m_Xpos = xpos;
+            m_Ypos = ypos;
         }
     }
 }

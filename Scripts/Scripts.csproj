@@ -1416,6 +1416,7 @@
     <Compile Include="Custom Systems\Custom Harvest\Tree Harvesting\TreeResources.cs" />
     <Compile Include="Custom Systems\Individual Custom Scripts\BlacksmithMachine.cs" />
     <Compile Include="Custom Systems\Individual Custom Scripts\ShardTravelGump.cs" />
+    <Compile Include="Custom Systems\Individual Custom Scripts\SuperShardTravelGump.cs" />
     <Compile Include="Custom Systems\SearchImage.cs" />
     <Compile Include="Custom Systems\StaticExporter.cs" />
     <Compile Include="Custom Systems\VitaNex\Core\Build\CSharpCompiler.cs" />

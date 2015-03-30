@@ -80,12 +80,12 @@ namespace Server.Gumps.Compendium
 
         public static void Initialize()
         {
-            CommandSystem.Register("ViewPage", AccessLevel.GameMaster, new CommandEventHandler(_OnCommand));
+            CommandSystem.Register("ViewPage", AccessLevel.GameMaster, new CommandEventHandler(ViewPage_OnCommand));
         }
 
-        [Usage("")]
-        [Description("Open the Main MOTD landingpage")]
-        public static void _OnCommand(CommandEventArgs e)
+        [Usage("ViewPage <pagename>")]
+        [Description("Open the <pagename> gump from the Compendium")]
+        public static void ViewPage_OnCommand(CommandEventArgs e)
         {
             Mobile caller = e.Mobile;
 
@@ -110,6 +110,8 @@ namespace Server.Gumps.Compendium
                     caller.SendMessage("That page does not exist.");
                 }
             }
+			else
+                caller.SendMessage("You must specify a page name to view.");
         }
     }
 }
