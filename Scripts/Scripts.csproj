@@ -1386,6 +1386,7 @@
     <Compile Include=".\Items\Shields\- Misc\PillarOfStrength.cs" />
     <Compile Include=".\Items\Shields\- Misc\SentinelsGuard.cs" />
     <Compile Include="Custom Systems\Addon2Static.cs" />
+    <Compile Include="Custom Systems\ChristianVirtues\ChristianVirtues.cs" />
     <Compile Include="Custom Systems\Compendium\Compendium.cs" />
     <Compile Include="Custom Systems\Compendium\CompendiumPageGump.cs" />
     <Compile Include="Custom Systems\Compendium\CompendiumPageRenderer.cs" />
@@ -1417,6 +1418,7 @@
     <Compile Include="Custom Systems\Individual Custom Scripts\BlacksmithMachine.cs" />
     <Compile Include="Custom Systems\Individual Custom Scripts\ShardTravelGump.cs" />
     <Compile Include="Custom Systems\Individual Custom Scripts\SuperShardTravelGump.cs" />
+    <Compile Include="Custom Systems\Runescape System\RunescapeSkills.cs" />
     <Compile Include="Custom Systems\SearchImage.cs" />
     <Compile Include="Custom Systems\StaticExporter.cs" />
     <Compile Include="Custom Systems\VitaNex\Core\Build\CSharpCompiler.cs" />
