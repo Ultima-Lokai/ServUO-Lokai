@@ -6,32 +6,35 @@ using System.Windows.Forms;
 
 namespace Server.Custom_Systems.Runescape_System
 {
-    /*  Attack
-        Defense
-        Strength
-        Hitpoints
-        Ranged
-        Prayer
-        Magic
-        Cooking
-        Woodcutting
-        Fletching
-        Fishing
-        Firemaking
-        Crafting
-        Smithing
-        Mining
-        Herblore
-        Agility
-        Thieving
-        Slayer
-        Farming
-        Runecrafting
-        Hunter
-        Construction
-        Summoning
-        Divining
-     */
+    public enum RuneSkillName
+    {
+        Agility, // Hiding/Stealth/ ***New Content
+        Attack, // Swords/Fencing/Macing/Throwing
+        Construction, // Carpentry
+        Cooking, // Cooking
+        Crafting, // Tailoring/Tinkering/
+        Defense, // Parrying
+        Divining, // SpiritSpeak/Mysticism
+        Farming, // ***New Content
+        Firemaking, // Camping
+        Fishing, // Fishing
+        Fletching, // Bowcraft
+        Herblore, // Alchemy
+        Hitpoints, // Anatomy
+        Hunter, // Tracking
+        Magic, // Magery
+        Mining, // Mining
+        Prayer, // Spirit Speak/Meditation/Chivalry
+        Ranged, // Archery
+        Runecrafting, // Spellweaving/ ***New Content
+        Slayer, // ***New Content
+        Smithing, // Smithing
+        Strength, // Wrestling
+        Summoning, // Magery/AnimalLore/Herding/AnimalTaming
+        Thieving, // Stealing/Hiding/Snooping/RemoveTrap/Lockpicking
+        Woodcutting // Lumberjacking
+    }
+
 
     class RunescapeSkills
     {

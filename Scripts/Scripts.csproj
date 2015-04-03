@@ -1418,6 +1418,7 @@
     <Compile Include="Custom Systems\Individual Custom Scripts\BlacksmithMachine.cs" />
     <Compile Include="Custom Systems\Individual Custom Scripts\ShardTravelGump.cs" />
     <Compile Include="Custom Systems\Individual Custom Scripts\SuperShardTravelGump.cs" />
+    <Compile Include="Custom Systems\Individual Custom Scripts\VirtuesVicesGump.cs" />
     <Compile Include="Custom Systems\Runescape System\RunescapeSkills.cs" />
     <Compile Include="Custom Systems\SearchImage.cs" />
     <Compile Include="Custom Systems\StaticExporter.cs" />
