@@ -12,14 +12,23 @@ namespace Server.Gumps
         private int m_Page;
         private Mobile m_From;
         private ShardTravelMap m_TravelMap;
-        private string[] MapPages = new string[]{"", "Trammel Cities", "Trammel Dungeons", "Felucca Cities", "Felucca Dungeons", "Trammel Moongates", "Felucca Moongates", 
-                 "Trammel Shrines", "Felucca Shrines", "Ilshenar Cities", "Ilshenar Dungeons", "Ilshenar Shrines", "Malas", "Tokuno Cities", "Tokuno Dungeons", "TerMur Points of Interest"};
+        private string[] MapPages = new string[]{"", "Trammel Cities", "Trammel Dungeons", "Trammel Moongates", "Trammel Shrines", "Felucca Cities", "Felucca Dungeons", "Felucca Moongates", 
+                 "Felucca Shrines", "Ilshenar Cities", "Ilshenar Dungeons", "Ilshenar Shrines", "Malas", "Tokuno Cities", "Tokuno Dungeons", "TerMur Points of Interest"};
 
-        public ShardTravelGump(Mobile from, int page, int x, int y, ShardTravelMap travelmap) : base(x, y)
+        private int m_Detail;
+
+        public ShardTravelGump(Mobile from, int page, int x, int y, ShardTravelMap travelmap)
+            : this(from, page, x, y, travelmap, 0)
+        {
+        }
+
+        public ShardTravelGump(Mobile from, int page, int x, int y, ShardTravelMap travelmap, int detail) : base(x, y)
         {
             m_Page = page;
             m_From = from;
             m_TravelMap = travelmap;
+            m_Detail = detail;
+
             if (m_TravelMap == null) return;
 
             if (m_TravelMap.Entries == null || m_TravelMap.Entries.Count <= 0)
@@ -30,7 +39,7 @@ namespace Server.Gumps
             if (m_TravelMap.Entries == null || m_TravelMap.Entries.Count <= 0)
             {
                 from.SendMessage("No entries were found on this map.");
-                m_From.CloseGump(typeof(ShardTravelGump));
+                m_From.CloseGump(typeof (ShardTravelGump));
                 return;
             }
 
@@ -43,13 +52,13 @@ namespace Server.Gumps
             {
                 case 1: // Trammel Cities
                 case 2: // Trammel Dungeons
-                case 5: // Trammel Moongates
-                case 7: // Trammel Shrines
+                case 3: // Trammel Moongates
+                case 4: // Trammel Shrines
                     AddImage(38, 30, 0x15D9);
                     break;
-                case 3: // Felucca Cities
-                case 4: // Felucca Dungeons
-                case 6: // Felucca Moongates
+                case 5: // Felucca Cities
+                case 6: // Felucca Dungeons
+                case 7: // Felucca Moongates
                 case 8: // Felucca Shrines
                     AddImage(38, 30, 0x15DA);
                     break;
@@ -72,9 +81,9 @@ namespace Server.Gumps
 
             AddLabel(206, 417, 0, MapPages[m_Page]);
             if (m_Page > 1)
-                AddButton(14, 25, 0x15E3, 0x15E7, 2, GumpButtonType.Reply, 0); // Previous Page
+                AddButton(21, 29, 0x15E3, 0x15E7, 2, GumpButtonType.Reply, 0); // Previous Page
             if (m_Page < 15)
-                AddButton(427, 25, 0x15E1, 0x15E5, 3, GumpButtonType.Reply, 0); // Next Page
+                AddButton(427, 29, 0x15E1, 0x15E5, 3, GumpButtonType.Reply, 0); // Next Page
 
             foreach (ShardTravelEntry entry in m_TravelMap.Entries)
             {
@@ -82,10 +91,38 @@ namespace Server.Gumps
                 {
                     AddButton(entry.XposButton, entry.YposButton, 1210, 1209, entry.Index, GumpButtonType.Reply,
                         0);
-                    AddLabel(entry.XposLabel, entry.YposLabel, 0, entry.Name);
+                    AddLabel(entry.XposLabel, entry.YposLabel, 0x480, entry.Name);
                 }
             }
 
+            if (m_Detail > 0)
+            {
+                ShardTravelEntry entry = m_TravelMap.GetEntry(m_Detail);
+                AddLabel(433, 84, 0, entry.Name);
+                AddLabel(433, 104, 0, string.Format("X: {0}",entry.Destination.X));
+                AddLabel(433, 124, 0, string.Format("Y: {0}",entry.Destination.Y));
+                AddLabel(433, 144, 0, string.Format("Z: {0}", entry.Destination.Z));
+                AddLabel(433, 164, 0, string.Format("Map: {0}", entry.Map));
+                if (entry.Unlocked)
+                {
+                    AddLabel(433, 184, 0x2A5, "Status: Unlocked");
+                    AddButton(434, 224, 4006, 4007, entry.Index + 10000, GumpButtonType.Reply, 0); // Teleport Now
+                    AddLabel(480, 224, 0x2A5, "Teleport Now");
+                    AddButton(434, 244, 4009, 4010, entry.Index + 20000, GumpButtonType.Reply, 0); // Gate Now
+                    AddLabel(480, 244, 0x2A5, "Gate Now");
+                }
+                else
+                {
+                    AddLabel(433, 184, 0x14D, "Status: Locked");
+                    if (m_From.AccessLevel >= AccessLevel.GameMaster)
+                    {
+                        AddButton(434, 224, 4006, 4007, entry.Index + 10000, GumpButtonType.Reply, 0); // Teleport Now
+                        AddLabel(480, 224, 0x2A5, "Teleport Now");
+                        AddButton(434, 244, 4009, 4010, entry.Index + 20000, GumpButtonType.Reply, 0); // Gate Now
+                        AddLabel(480, 244, 0x2A5, "Gate Now");
+                    }
+                }
+            }
         }
 
         public override void OnResponse(NetState sender, RelayInfo info)
@@ -101,62 +138,72 @@ namespace Server.Gumps
                     m_From.SendGump(new ShardTravelGump(m_From, m_Page - 1, X, Y, m_TravelMap));
                 if (id == 3)
                     m_From.SendGump(new ShardTravelGump(m_From, m_Page + 1, X, Y, m_TravelMap));
-                return;
             }
-            // Here begins the teleport
-            try
+            else if (id < 10000)
             {
-                ShardTravelEntry entry = m_TravelMap.GetEntry(id);
-                if (entry == null) return;
-
-                p = m_TravelMap.GetEntry(id).Destination;
-                map = m_TravelMap.GetEntry(id).Map;
-
-                if (Factions.Sigil.ExistsOn(m_From))
-                {
-                    m_From.SendLocalizedMessage(1061632); // You can't do that while carrying the sigil.
-                }
-                else if (map == Map.Felucca && m_From is PlayerMobile && ((PlayerMobile)m_From).Young)
-                {
-                    m_From.SendLocalizedMessage(1049543); // You decide against traveling to Felucca while you are still young.
-                }
-                else if (m_From.Kills >= 5 && map != Map.Felucca)
-                {
-                    m_From.SendLocalizedMessage(1019004); // You are not allowed to travel there.
-                }
-                else if (m_From.Criminal)
-                {
-                    m_From.SendLocalizedMessage(1005561, "", 0x22); // Thou'rt a criminal and cannot escape so easily.
-                }
-                else if (SpellHelper.CheckCombat(m_From))
-                {
-                    m_From.SendLocalizedMessage(1005564, "", 0x22); // Wouldst thou flee during the heat of battle??
-                }
-                else if (Server.Misc.WeightOverloading.IsOverloaded(m_From))
-                {
-                    m_From.SendLocalizedMessage(502359, "", 0x22); // Thou art too encumbered to move.
-                }
-                else if (!map.CanSpawnMobile(p.X, p.Y, p.Z))
-                {
-                    m_From.SendLocalizedMessage(501942); // That location is blocked.
-                }
-                else if (m_From.Holding != null)
-                {
-                    m_From.SendLocalizedMessage(1071955); // You cannot teleport while dragging an object.
-                }
-                else if (entry.Unlocked || m_From.AccessLevel >= AccessLevel.GameMaster)
-                {
-
-                    m_From.MoveToWorld(p, map);
-                    m_From.SendMessage("You have been moved to X:{0}, Y:{1}, Z:{2}, Map: {3}", p.X, p.Y, p.Z, map);
-                }
+                m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y, m_TravelMap, id));
             }
-            catch
+            else
             {
-                m_From.SendMessage("Teleport failed.");
-            }
+                // Here begins the teleport
+                try
+                {
+                    id -= 10000;
+                    bool NonGM = m_From.AccessLevel < AccessLevel.GameMaster;
+                    ShardTravelEntry entry = m_TravelMap.GetEntry(id);
+                    if (entry == null) return;
 
-            m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y, m_TravelMap));
+                    p = m_TravelMap.GetEntry(id).Destination;
+                    map = m_TravelMap.GetEntry(id).Map;
+
+                    if (NonGM && Factions.Sigil.ExistsOn(m_From))
+                    {
+                        m_From.SendLocalizedMessage(1061632); // You can't do that while carrying the sigil.
+                    }
+                    else if (NonGM && map == Map.Felucca && m_From is PlayerMobile && ((PlayerMobile)m_From).Young)
+                    {
+                        m_From.SendLocalizedMessage(1049543);
+                            // You decide against traveling to Felucca while you are still young.
+                    }
+                    else if (NonGM && m_From.Kills >= 5 && map != Map.Felucca)
+                    {
+                        m_From.SendLocalizedMessage(1019004); // You are not allowed to travel there.
+                    }
+                    else if (NonGM && m_From.Criminal)
+                    {
+                        m_From.SendLocalizedMessage(1005561, "", 0x22);
+                            // Thou'rt a criminal and cannot escape so easily.
+                    }
+                    else if (NonGM && SpellHelper.CheckCombat(m_From))
+                    {
+                        m_From.SendLocalizedMessage(1005564, "", 0x22); // Wouldst thou flee during the heat of battle??
+                    }
+                    else if (NonGM && Misc.WeightOverloading.IsOverloaded(m_From))
+                    {
+                        m_From.SendLocalizedMessage(502359, "", 0x22); // Thou art too encumbered to move.
+                    }
+                    else if (!map.CanSpawnMobile(p.X, p.Y, p.Z))
+                    {
+                        m_From.SendLocalizedMessage(501942); // That location is blocked.
+                    }
+                    else if (m_From.Holding != null)
+                    {
+                        m_From.SendLocalizedMessage(1071955); // You cannot teleport while dragging an object.
+                    }
+                    else if (entry.Unlocked || !NonGM)
+                    {
+
+                        m_From.MoveToWorld(p, map);
+                        m_From.SendMessage("You have been moved to X:{0}, Y:{1}, Z:{2}, Map: {3}", p.X, p.Y, p.Z, map);
+                    }
+                }
+                catch
+                {
+                    m_From.SendMessage("Teleport failed.");
+                }
+
+                m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y, m_TravelMap));
+            }
 
         }
     }
@@ -386,19 +433,35 @@ namespace Server.Gumps
 
             // Trammel Cities			
             entries.Add(new ShardTravelEntry(100, 1, "Britain", new Point3D(1434, 1699, 2), Map.Trammel, 171, 172, 147, 176));
-            entries.Add(new ShardTravelEntry(101, 1, "Bucs Den", new Point3D(2705, 2162, 0), Map.Trammel, 245, 244, 245, 264));
+            entries.Add(new ShardTravelEntry(101, 1, "Bucs Den", new Point3D(2705, 2162, 0), Map.Trammel, 245, 244, 245, 224));
             entries.Add(new ShardTravelEntry(102, 1, "Cove", new Point3D(2237, 1214, 0), Map.Trammel, 212, 124, 212, 144));
             entries.Add(new ShardTravelEntry(103, 1, "New Haven", new Point3D(3493, 2577, 14), Map.Trammel, 314, 248, 314, 268));
             entries.Add(new ShardTravelEntry(104, 1, "Jhelom", new Point3D(1417, 3821, 0), Map.Trammel, 146, 369, 141, 391));
-            entries.Add(new ShardTravelEntry(105, 1, "New Magincia", new Point3D(3728, 2164, 20), Map.Trammel, 340, 244, 340, 264));
+            entries.Add(new ShardTravelEntry(105, 1, "New Magincia", new Point3D(3728, 2164, 20), Map.Trammel, 310, 204, 310, 224));
             entries.Add(new ShardTravelEntry(106, 1, "Minoc", new Point3D(2525, 582, 0), Map.Trammel, 232, 50, 232, 70));
-            entries.Add(new ShardTravelEntry(107, 1, "Moonglow", new Point3D(4471, 1177, 0), Map.Trammel, 312, 117, 364, 130));
-            entries.Add(new ShardTravelEntry(108, 1, "Nujel'm", new Point3D(3770, 1308, 0), Map.Trammel, 343, 134, 343, 114));
+            entries.Add(new ShardTravelEntry(107, 1, "Moonglow", new Point3D(4471, 1177, 0), Map.Trammel, 363, 90, 363, 110));
+            entries.Add(new ShardTravelEntry(108, 1, "Nujel'm", new Point3D(3770, 1308, 0), Map.Trammel, 312, 117, 312, 137));
             entries.Add(new ShardTravelEntry(109, 1, "Serpents Hold", new Point3D(2895, 3479, 15), Map.Trammel, 247, 330, 247, 350));
             entries.Add(new ShardTravelEntry(110, 1, "Skara Brae", new Point3D(596, 2138, 0), Map.Trammel, 45, 246, 78, 228));
             entries.Add(new ShardTravelEntry(111, 1, "Trinsic", new Point3D(1823, 2821, 0), Map.Trammel, 182, 260, 182, 280));
-            entries.Add(new ShardTravelEntry(112, 1, "Vesper", new Point3D(2899, 676, 0), Map.Trammel, 247, 104, 247, 124));
-            entries.Add(new ShardTravelEntry(113, 1, "Yew", new Point3D(542, 985, 0), Map.Trammel, 62, 81, 78, 104));
+            entries.Add(new ShardTravelEntry(112, 1, "Vesper", new Point3D(2899, 676, 0), Map.Trammel, 247, 84, 247, 104));
+            entries.Add(new ShardTravelEntry(113, 1, "Yew", new Point3D(542, 985, 0), Map.Trammel, 62, 87, 78, 107));
+
+            // Felucca Cities
+            entries.Add(new ShardTravelEntry(500, 5, "Britain", new Point3D(1434, 1699, 2), Map.Felucca, 171, 172, 147, 176));
+            entries.Add(new ShardTravelEntry(501, 5, "Bucs Den", new Point3D(2705, 2162, 0), Map.Felucca, 245, 244, 245, 224));
+            entries.Add(new ShardTravelEntry(502, 5, "Cove", new Point3D(2237, 1214, 0), Map.Felucca, 212, 124, 212, 144));
+            entries.Add(new ShardTravelEntry(503, 5, "Jhelom", new Point3D(1417, 3821, 0), Map.Felucca, 146, 369, 141, 391));
+            entries.Add(new ShardTravelEntry(504, 5, "Magincia", new Point3D(3728, 2164, 20), Map.Felucca, 310, 204, 310, 224));
+            entries.Add(new ShardTravelEntry(505, 5, "Minoc", new Point3D(2525, 582, 0), Map.Felucca, 232, 50, 232, 70));
+            entries.Add(new ShardTravelEntry(506, 5, "Moonglow", new Point3D(4471, 1177, 0), Map.Felucca, 363, 90, 363, 110));
+            entries.Add(new ShardTravelEntry(507, 5, "Nujel'm", new Point3D(3770, 1308, 0), Map.Felucca, 312, 117, 312, 137));
+            entries.Add(new ShardTravelEntry(508, 5, "Ocllo", new Point3D(3626, 2611, 0), Map.Felucca, 314, 248, 314, 268));
+            entries.Add(new ShardTravelEntry(509, 5, "Serpents Hold", new Point3D(2895, 3479, 15), Map.Felucca, 247, 330, 247, 350));
+            entries.Add(new ShardTravelEntry(510, 5, "Skara Brae", new Point3D(596, 2138, 0), Map.Felucca, 45, 246, 78, 228));
+            entries.Add(new ShardTravelEntry(511, 5, "Trinsic", new Point3D(1823, 2821, 0), Map.Felucca, 182, 260, 182, 280));
+            entries.Add(new ShardTravelEntry(512, 5, "Vesper", new Point3D(2899, 676, 0), Map.Felucca, 247, 84, 247, 104));
+            entries.Add(new ShardTravelEntry(513, 5, "Yew", new Point3D(542, 985, 0), Map.Felucca, 62, 87, 78, 107));
 
             // Trammel Dungeons
             entries.Add(new ShardTravelEntry(200, 2, "Covetous", new Point3D(2498, 921, 0), Map.Trammel, 230, 79, 230, 99));
@@ -414,79 +477,63 @@ namespace Server.Gumps
             entries.Add(new ShardTravelEntry(210, 0, "Solen Hive", new Point3D(2607, 763, 0), Map.Trammel, 0, 0, 0, 0));
             entries.Add(new ShardTravelEntry(211, 2, "Wrong", new Point3D(2043, 238, 10), Map.Trammel, 190, 65, 182, 55));
 
-            // Felucca Cities
-            entries.Add(new ShardTravelEntry(300, 3, "Britain", new Point3D(1434, 1699, 2), Map.Felucca, 171, 172, 147, 176));
-            entries.Add(new ShardTravelEntry(301, 3, "Bucs Den", new Point3D(2705, 2162, 0), Map.Felucca, 245, 244, 245, 264));
-            entries.Add(new ShardTravelEntry(302, 3, "Cove", new Point3D(2237, 1214, 0), Map.Felucca, 212, 124, 212, 144));
-            entries.Add(new ShardTravelEntry(303, 3, "Jhelom", new Point3D(1417, 3821, 0), Map.Felucca, 146, 369, 141, 391));
-            entries.Add(new ShardTravelEntry(304, 3, "Magincia", new Point3D(3728, 2164, 20), Map.Felucca, 340, 244, 340, 264));
-            entries.Add(new ShardTravelEntry(305, 3, "Minoc", new Point3D(2525, 582, 0), Map.Felucca, 232, 50, 232, 70));
-            entries.Add(new ShardTravelEntry(306, 3, "Moonglow", new Point3D(4471, 1177, 0), Map.Felucca, 312, 117, 364, 130));
-            entries.Add(new ShardTravelEntry(307, 3, "Nujel'm", new Point3D(3770, 1308, 0), Map.Felucca, 343, 134, 343, 114));
-            entries.Add(new ShardTravelEntry(308, 3, "Ocllo", new Point3D(3626, 2611, 0), Map.Felucca, 325, 280, 325, 300));
-            entries.Add(new ShardTravelEntry(309, 3, "Serpents Hold", new Point3D(2895, 3479, 15), Map.Felucca, 247, 330, 247, 350));
-            entries.Add(new ShardTravelEntry(310, 3, "Skara Brae", new Point3D(596, 2138, 0), Map.Felucca, 45, 246, 78, 228));
-            entries.Add(new ShardTravelEntry(311, 3, "Trinsic", new Point3D(1823, 2821, 0), Map.Felucca, 182, 260, 182, 280));
-            entries.Add(new ShardTravelEntry(312, 3, "Vesper", new Point3D(2899, 676, 0), Map.Felucca, 247, 104, 247, 124));
-            entries.Add(new ShardTravelEntry(313, 3, "Yew", new Point3D(542, 985, 0), Map.Felucca, 62, 81, 78, 104));
-
             // Felucca Dungeons
-            entries.Add(new ShardTravelEntry(400, 4, "Covetous", new Point3D(2498, 921, 0), Map.Felucca, 230, 79, 230, 99));
-            entries.Add(new ShardTravelEntry(401, 4, "Deceit", new Point3D(4111, 434, 5), Map.Felucca, 342, 47, 338, 65));
-            entries.Add(new ShardTravelEntry(402, 4, "Despise", new Point3D(1301, 1080, 0), Map.Felucca, 131, 135, 131, 121));
-            entries.Add(new ShardTravelEntry(403, 4, "Destard", new Point3D(1176, 2640, 2), Map.Felucca, 118, 289, 118, 273));
-            entries.Add(new ShardTravelEntry(404, 0, "Fire", new Point3D(2923, 3409, 8), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(405, 4, "Hythloth", new Point3D(4721, 3824, 0), Map.Felucca, 325, 385, 382, 377));
-            entries.Add(new ShardTravelEntry(406, 0, "Ice", new Point3D(1999, 81, 4), Map.Felucca, 147, 30, 172, 33));
-            entries.Add(new ShardTravelEntry(407, 4, "Orc Caves", new Point3D(1017, 1429, 0), Map.Felucca, 106, 172, 104, 156));
-            entries.Add(new ShardTravelEntry(408, 0, "Sanctuary", new Point3D(759, 1642, 0), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(409, 4, "Shame", new Point3D(511, 1565, 0), Map.Felucca, 70, 185, 70, 169));
-            entries.Add(new ShardTravelEntry(410, 0, "Solen Hive", new Point3D(2607, 763, 0), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(411, 4, "Wrong", new Point3D(2043, 238, 10), Map.Felucca, 190, 65, 182, 55));
+            entries.Add(new ShardTravelEntry(600, 6, "Covetous", new Point3D(2498, 921, 0), Map.Felucca, 230, 79, 230, 99));
+            entries.Add(new ShardTravelEntry(601, 6, "Deceit", new Point3D(4111, 434, 5), Map.Felucca, 342, 47, 338, 65));
+            entries.Add(new ShardTravelEntry(602, 6, "Despise", new Point3D(1301, 1080, 0), Map.Felucca, 131, 135, 131, 121));
+            entries.Add(new ShardTravelEntry(603, 6, "Destard", new Point3D(1176, 2640, 2), Map.Felucca, 118, 289, 118, 273));
+            entries.Add(new ShardTravelEntry(604, 0, "Fire", new Point3D(2923, 3409, 8), Map.Felucca, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(605, 6, "Hythloth", new Point3D(4721, 3824, 0), Map.Felucca, 325, 385, 382, 377));
+            entries.Add(new ShardTravelEntry(606, 0, "Ice", new Point3D(1999, 81, 4), Map.Felucca, 147, 30, 172, 33));
+            entries.Add(new ShardTravelEntry(607, 6, "Orc Caves", new Point3D(1017, 1429, 0), Map.Felucca, 106, 172, 104, 156));
+            entries.Add(new ShardTravelEntry(608, 0, "Sanctuary", new Point3D(759, 1642, 0), Map.Felucca, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(609, 6, "Shame", new Point3D(511, 1565, 0), Map.Felucca, 70, 185, 70, 169));
+            entries.Add(new ShardTravelEntry(610, 0, "Solen Hive", new Point3D(2607, 763, 0), Map.Felucca, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(611, 6, "Wrong", new Point3D(2043, 238, 10), Map.Felucca, 190, 65, 182, 55));
 
             // Trammel Moongates
-            entries.Add(new ShardTravelEntry(500, 0, "Britain", new Point3D(1336, 1997, 5), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(501, 0, "New Haven", new Point3D(3450, 2677, 25), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(502, 0, "Jhelom", new Point3D(1499, 3771, 5), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(503, 0, "Magincia", new Point3D(3563, 2139, 34), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(504, 0, "Minoc", new Point3D(2701, 692, 5), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(505, 0, "Moonglow", new Point3D(4467, 1283, 5), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(506, 0, "Skara Brae", new Point3D(643, 2067, 5), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(507, 0, "Trinsic", new Point3D(1828, 2948, -20), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(508, 0, "Yew", new Point3D(771, 752, 5), Map.Trammel, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(300, 3, "Britain", new Point3D(1336, 1997, 5), Map.Trammel, 156, 197, 135, 206));
+            entries.Add(new ShardTravelEntry(301, 3, "New Haven", new Point3D(3450, 2677, 25), Map.Trammel, 314, 248, 299, 268));
+            entries.Add(new ShardTravelEntry(302, 3, "Jhelom", new Point3D(1499, 3771, 5), Map.Trammel, 159, 369, 144, 374));
+            entries.Add(new ShardTravelEntry(303, 3, "Magincia", new Point3D(3563, 2139, 34), Map.Trammel, 299, 202, 299, 222));
+            entries.Add(new ShardTravelEntry(304, 3, "Minoc", new Point3D(2701, 692, 5), Map.Trammel, 232, 80, 232, 100));
+            entries.Add(new ShardTravelEntry(305, 3, "Moonglow", new Point3D(4467, 1283, 5), Map.Trammel, 317, 152, 367, 145));
+            entries.Add(new ShardTravelEntry(306, 3, "Skara Brae", new Point3D(643, 2067, 5), Map.Trammel, 45, 231, 79, 218));
+            entries.Add(new ShardTravelEntry(307, 3, "Trinsic", new Point3D(1828, 2948, -20), Map.Trammel, 188, 290, 172, 293));
+            entries.Add(new ShardTravelEntry(308, 3, "Yew", new Point3D(771, 752, 5), Map.Trammel, 62, 81, 93, 99));
 
             // Felucca Moongates
-            entries.Add(new ShardTravelEntry(600, 0, "Britain", new Point3D(1336, 1997, 5), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(601, 0, "Buccaneer's Den", new Point3D(2711, 2234, 0), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(602, 0, "Jhelom", new Point3D(1499, 3771, 5), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(603, 0, "Magincia", new Point3D(3563, 2139, 34), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(604, 0, "Minoc", new Point3D(2701, 692, 5), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(605, 0, "Moonglow", new Point3D(4467, 1283, 5), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(606, 0, "Skara Brae", new Point3D(643, 2067, 5), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(607, 0, "Trinsic", new Point3D(1828, 2948, -20), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(608, 0, "Yew", new Point3D(771, 752, 5), Map.Felucca, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(700, 7, "Britain", new Point3D(1336, 1997, 5), Map.Felucca, 156, 197, 135, 206));
+            entries.Add(new ShardTravelEntry(701, 7, "Buccaneer's Den", new Point3D(2711, 2234, 0), Map.Felucca, 245, 244, 245, 224));
+            entries.Add(new ShardTravelEntry(702, 7, "Jhelom", new Point3D(1499, 3771, 5), Map.Felucca, 159, 369, 144, 374));
+            entries.Add(new ShardTravelEntry(703, 7, "Magincia", new Point3D(3563, 2139, 34), Map.Felucca, 299, 202, 299, 222));
+            entries.Add(new ShardTravelEntry(704, 7, "Minoc", new Point3D(2701, 692, 5), Map.Felucca, 232, 80, 232, 100));
+            entries.Add(new ShardTravelEntry(705, 7, "Moonglow", new Point3D(4467, 1283, 5), Map.Felucca, 317, 152, 367, 145));
+            entries.Add(new ShardTravelEntry(706, 7, "Skara Brae", new Point3D(643, 2067, 5), Map.Felucca, 45, 231, 79, 218));
+            entries.Add(new ShardTravelEntry(707, 7, "Trinsic", new Point3D(1828, 2948, -20), Map.Felucca, 188, 290, 172, 293));
+            entries.Add(new ShardTravelEntry(708, 7, "Yew", new Point3D(771, 752, 5), Map.Felucca, 62, 81, 93, 99));
 
             // Trammel Shrines
-            entries.Add(new ShardTravelEntry(700, 0, "Compassion", new Point3D(1215, 467, -13), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(701, 0, "Honesty", new Point3D(722, 1366, -60), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(702, 0, "Honor", new Point3D(744, 724, -28), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(703, 0, "Humility", new Point3D(281, 1016, 0), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(704, 0, "Justice", new Point3D(987, 1011, -32), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(705, 0, "Sacrifice", new Point3D(1174, 1286, -30), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(706, 0, "Spirituality", new Point3D(1532, 1340, -3), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(707, 0, "Valor", new Point3D(528, 216, -45), Map.Trammel, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(708, 0, "Choas", new Point3D(1721, 218, 96), Map.Trammel, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(400, 4, "Compassion", new Point3D(1215, 467, -13), Map.Trammel, 146, 126, 179, 109));
+            entries.Add(new ShardTravelEntry(401, 4, "Honesty", new Point3D(722, 1366, -60), Map.Trammel, 312, 91, 349, 79));
+            entries.Add(new ShardTravelEntry(402, 4, "Honor", new Point3D(744, 724, -28), Map.Trammel, 119, 338, 156, 353));
+            entries.Add(new ShardTravelEntry(403, 4, "Humility", new Point3D(281, 1016, 0), Map.Trammel, 296, 356, 346, 365));
+            entries.Add(new ShardTravelEntry(404, 4, "Justice", new Point3D(987, 1011, -32), Map.Trammel, 87, 52, 130, 72));
+            entries.Add(new ShardTravelEntry(405, 4, "Sacrifice", new Point3D(1174, 1286, -30), Map.Trammel, 224, 50, 277, 52));
+            entries.Add(new ShardTravelEntry(406, 4, "Spirituality", new Point3D(1532, 1340, -3), Map.Trammel, 169, 250, 148, 252));
+            entries.Add(new ShardTravelEntry(407, 4, "Valor", new Point3D(528, 216, -45), Map.Trammel, 236, 379, 221, 392));
+            entries.Add(new ShardTravelEntry(408, 4, "Choas", new Point3D(1721, 218, 96), Map.Trammel, 105, 116, 141, 106));
 
             // Felucca Shrines
-            entries.Add(new ShardTravelEntry(800, 0, "Compassion", new Point3D(1215, 467, -13), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(801, 0, "Honesty", new Point3D(722, 1366, -60), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(802, 0, "Honor", new Point3D(744, 724, -28), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(803, 0, "Humility", new Point3D(281, 1016, 0), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(804, 0, "Justice", new Point3D(987, 1011, -32), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(805, 0, "Sacrifice", new Point3D(1174, 1286, -30), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(806, 0, "Spirituality", new Point3D(1532, 1340, -3), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(807, 0, "Valor", new Point3D(528, 216, -45), Map.Felucca, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(808, 0, "Choas", new Point3D(1721, 218, 96), Map.Felucca, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(800, 8, "Compassion", new Point3D(1215, 467, -13), Map.Felucca, 146, 126, 179, 109));
+            entries.Add(new ShardTravelEntry(801, 8, "Honesty", new Point3D(722, 1366, -60), Map.Felucca, 312, 91, 349, 79));
+            entries.Add(new ShardTravelEntry(802, 8, "Honor", new Point3D(744, 724, -28), Map.Felucca, 119, 338, 156, 353));
+            entries.Add(new ShardTravelEntry(803, 8, "Humility", new Point3D(281, 1016, 0), Map.Felucca, 296, 356, 346, 365));
+            entries.Add(new ShardTravelEntry(804, 8, "Justice", new Point3D(987, 1011, -32), Map.Felucca, 87, 52, 130, 72));
+            entries.Add(new ShardTravelEntry(805, 8, "Sacrifice", new Point3D(1174, 1286, -30), Map.Felucca, 224, 50, 277, 52));
+            entries.Add(new ShardTravelEntry(806, 8, "Spirituality", new Point3D(1532, 1340, -3), Map.Felucca, 169, 250, 148, 252));
+            entries.Add(new ShardTravelEntry(807, 8, "Valor", new Point3D(528, 216, -45), Map.Felucca, 236, 379, 221, 392));
+            entries.Add(new ShardTravelEntry(808, 8, "Choas", new Point3D(1721, 218, 96), Map.Felucca, 105, 116, 141, 106));
 
             // Ilshenar Cities
             entries.Add(new ShardTravelEntry(900, 9, "Gargoyle City", new Point3D(852, 602, -40), Map.Ilshenar, 160, 150, 160, 170));
@@ -519,15 +566,10 @@ namespace Server.Gumps
             // Malas
             entries.Add(new ShardTravelEntry(1200, 12, "Luna", new Point3D(1015, 527, -65), Map.Malas, 120, 90, 120, 110));
             entries.Add(new ShardTravelEntry(1201, 12, "Umbra", new Point3D(1997, 1386, -85), Map.Malas, 290, 260, 290, 280));
-            entries.Add(new ShardTravelEntry(1202, 0, "Orc Fort 1", new Point3D(912, 215, -90), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1203, 0, "Orc Fort 2", new Point3D(1678, 374, -50), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1204, 0, "Orc Fort 3", new Point3D(1375, 621, -86), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1205, 0, "Orc Fort 4", new Point3D(1184, 715, -89), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1206, 0, "Orc Fort 5", new Point3D(1279, 1324, -90), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1207, 0, "Orc Fort 6", new Point3D(1598, 1834, -107), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1208, 0, "Ruined Temple", new Point3D(1598, 1762, -110), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1209, 0, "Doom", new Point3D(2368, 1267, -85), Map.Malas, 0, 0, 0, 0));
-            entries.Add(new ShardTravelEntry(1210, 0, "Labyrinth", new Point3D(1730, 981, -80), Map.Malas, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(1202, 0, "Orc Fort", new Point3D(912, 215, -90), Map.Malas, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(1203, 0, "Ruined Temple", new Point3D(1598, 1762, -110), Map.Malas, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(1204, 0, "Doom", new Point3D(2368, 1267, -85), Map.Malas, 0, 0, 0, 0));
+            entries.Add(new ShardTravelEntry(1205, 0, "Labyrinth", new Point3D(1730, 981, -80), Map.Malas, 0, 0, 0, 0));
 
             // Tokuno Cities
             entries.Add(new ShardTravelEntry(1300, 0, "Isamu-Jima", new Point3D(1169, 998, 41), Map.Tokuno, 0, 0, 0, 0));
