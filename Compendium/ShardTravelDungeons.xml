@@ -62,6 +62,15 @@
  <NormalId>1210</NormalId>
  </Element>
  <Element>
+  <ElementName>WrongLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>198</X>
+  <Y>53</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Wrong</Text>
+ </Element>
+ <Element>
   <ElementName>Covetous</ElementName>
   <Type>ButtonElement</Type>
   <X>223</X>
@@ -70,6 +79,15 @@
  <GumpLink></GumpLink>
  <PressedId>1209</PressedId>
  <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>CovetousLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>239</X>
+  <Y>107</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Covetous</Text>
  </Element>
  <Element>
   <ElementName>Hythloth</ElementName>
@@ -135,10 +153,103 @@
   <ElementName>Ice</ElementName>
   <Type>ButtonElement</Type>
   <X>172</X>
-  <Y>33</Y>
+  <Y>36</Y>
   <Z>13</Z>
  <GumpLink></GumpLink>
  <PressedId>1209</PressedId>
  <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>FireButton</ElementName>
+  <Type>ButtonElement</Type>
+  <X>247</X>
+  <Y>336</Y>
+  <Z>14</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>FireLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>221</X>
+  <Y>330</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Fire</Text>
+ </Element>
+ <Element>
+  <ElementName>SanctuaryButton</ElementName>
+  <Type>ButtonElement</Type>
+  <X>91</X>
+  <Y>172</Y>
+  <Z>15</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>SanctuaryLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>94</X>
+  <Y>182</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Sanctuary</Text>
+ </Element>
+ <Element>
+  <ElementName>SolenButton</ElementName>
+  <Type>ButtonElement</Type>
+  <X>160</X>
+  <Y>101</Y>
+  <Z>16</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>SolenLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>140</X>
+  <Y>81</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Solen Hive</Text>
+ </Element>
+ <Element>
+  <ElementName>IceLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>152</X>
+  <Y>33</Y>
+  <Z>22</Z>
+ <Hue>1152</Hue>
+ <Text>Ice</Text>
+ </Element>
+ <Element>
+  <ElementName>ShameLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>46</X>
+  <Y>150</Y>
+  <Z>23</Z>
+ <Hue>1152</Hue>
+ <Text>Shame</Text>
+ </Element>
+ <Element>
+  <ElementName>OrcLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>120</X>
+  <Y>151</Y>
+  <Z>24</Z>
+ <Hue>1152</Hue>
+ <Text>Orc Caves</Text>
+ </Element>
+ <Element>
+  <ElementName>DespiseLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>85</X>
+  <Y>114</Y>
+  <Z>25</Z>
+ <Hue>1152</Hue>
+ <Text>Despise</Text>
  </Element>
 </CompendiumArticle>

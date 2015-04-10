@@ -35,6 +35,20 @@ namespace Server.Custom_Systems.Runescape_System
         Woodcutting // Lumberjacking
     }
 
+    /*
+     Logs: Normal, Oak, Willow, Maple, Yew, Magic, Mahogany, Teak
+     Ore: Copper, Tin, Clay, Iron, Silver, Gold, Coal, Mithril, Adamantite, RuneOre, RuneEssence
+     Bars: Bronze, Iron, Silver, Gold, Mithril, Adamantite, Rune
+     Bows: Regular, Oak, Willow, Maple, Yew, Magic
+     Fish: Sardine, Mackerel, Anchovie, Shrimp, Pike, Salmon, Trout, Bass, Lobster, Swordfish, Shark, Eel, MantaRay, Turtle
+     Jewelry: Necklace, Ring, Amulet, Bracelet, Tiara
+     Gem: Sapphire, Emerald, Ruby, Diamond, Dragonstone, Opal, Jade, Topaz
+     Runes: Body, Mind, Air, Water, Earth, Fire, Chaos, Nature, Cosmic, Law, Astral, Soul, Blood
+     Hides: CowHide, GreenDragonHide, BlueDragonHide, RedDragonHide, BlackDragonHide
+     Leather: Leather, HardLeather, GreenDragonLeather, BlueDragonLeather, RedDragonLeather, BlackDragonLeather
+     
+     
+     */
 
     class RunescapeSkills
     {

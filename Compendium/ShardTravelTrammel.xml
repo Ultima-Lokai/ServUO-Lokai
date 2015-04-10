@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <CompendiumArticle>
-  <Name>ShardTravelFelucca</Name>
+  <Name>ShardTravelTrammel</Name>
  <Element>
   <ElementName>DarkGreyBorder</ElementName>
   <Type>BackgroundElement</Type>
@@ -36,7 +36,7 @@
   <X>206</X>
   <Y>417</Y>
   <Z>4</Z>
- <Text>Felucca Cities</Text>
+ <Text>Trammel Cities</Text>
  <Width>100</Width>
  <Height>40</Height>
  <Background>False</Background>
@@ -49,19 +49,19 @@
   <Y>30</Y>
   <Z>3</Z>
  <Hue>0</Hue>
- <GumpId>5593</GumpId>
+ <GumpId>5594</GumpId>
  </Element>
  <Element>
-  <ElementName>OccloLabel</ElementName>
+  <ElementName>NewHavenLabel</ElementName>
   <Type>LabelElement</Type>
   <X>331</X>
   <Y>264</Y>
   <Z>5</Z>
  <Hue>1152</Hue>
- <Text>Occlo</Text>
+ <Text>New Haven</Text>
  </Element>
  <Element>
-  <ElementName>OccloButton</ElementName>
+  <ElementName>NewHavenButton</ElementName>
   <Type>ButtonElement</Type>
   <X>314</X>
   <Y>268</Y>

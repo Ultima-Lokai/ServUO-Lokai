@@ -110,27 +110,34 @@ namespace Server.Items
             int root = m_Tool.ResourceType == TreeResourceType.RootBranch ? 2361 : 2360;
             int sap = m_Tool.ResourceType == TreeResourceType.SapJuice ? 2361 : 2360;
             int log = m_Tool.ResourceType == TreeResourceType.LogsBranches ? 2361 : 2360;
+            //int body = m_From.Race.Name.Contains("argoyle") ? ( m_From.Female ? 665 : 666 )
+            //    : m_From.Race.Name.Contains("lf") ? ( m_From.Female ? 15 : 14 )
+            //    : m_From.Female ? 13 : 12;
             AddPage(0);
             AddBackground(40, 40, 404, 475, 9250);
-            AddImage(40, 40, from.Female ? 13 : 12, 146);
-            AddImage(40, 40, 50981);
-            AddImage(40, 40, 60479);
-            AddImage(40, 40, 60517);
-            AddImage(40, 40, 50617);
-            AddImage(40, -30, 50650);
-            AddImage(-3, 178, 50497);
-            AddImage(95, 81, 11374);
-            AddImage(51, 52, 11374);
-            AddImage(95, 52, 11374);
-            AddImage(55, 99, 11374);
-            AddImage(56, 135, 11374);
-            AddImage(61, 233, 11374);
-            AddLabel(99, 56, 1378, @"A");
-            AddLabel(99, 84, 1378, @"B");
-            AddLabel(60, 102, 1378, @"C");
-            AddLabel(61, 137, 1378, @"D");
-            AddLabel(66, 236, 1378, @"E");
-            AddLabel(57, 57, 1378, @"F");
+            AddImage(40, 40, 50693); // Sapping blade
+            AddImage(40, 40, from.Female ? 13 : 12, 145); // Body
+            AddImage(40, 40, 50981); // Bark scraping wand
+            AddImage(40, 40, 60479); // Sandals
+            AddImage(40, 0, 50931); // Scythe
+            AddImage(40, 20, 50644); // Axe
+            AddImage(40, 40, 50561); // Coif
+            AddImage(40, 40, 60517); // Robe
+            AddImage(40, 40, 50617); // Staff
+            AddImage(-3, 178, 50497); // Root digging blade
+            AddImage(100, 50, m_Tool.ResourceType == TreeResourceType.FruitNut ? 11340 : 11374); // A Background
+            AddImage(132, 50, m_Tool.ResourceType == TreeResourceType.LeafSpine ? 11340 : 11374);// B Background
+            AddImage(52, 72, m_Tool.ResourceType == TreeResourceType.LogsBranches ? 11340 : 11374); // F Background
+            AddImage(55, 109, m_Tool.ResourceType == TreeResourceType.BarkSkin ? 11340 : 11374); // C Background
+            AddImage(60, 175, m_Tool.ResourceType == TreeResourceType.SapJuice ? 11340 : 11374); // D Background
+            AddImage(61, 233, m_Tool.ResourceType == TreeResourceType.RootBranch ? 11340 : 11374); // E Background
+            AddLabel(106, 55, 1378, @"A");
+            AddLabel(121, 54, 1378, @"+");
+            AddLabel(138, 55, 1378, @"B");
+            AddLabel(58, 77, 1378, @"F");
+            AddLabel(61, 114, 1378, @"C");
+            AddLabel(66, 180, 1378, @"D");
+            AddLabel(67, 238, 1378, @"E");
             AddLabel(70, 300, 1378, @"A");
             AddLabel(70, 330, 1378, @"B");
             AddLabel(70, 360, 1378, @"C");

@@ -45,11 +45,11 @@ namespace Server.Custom
 
     public enum ChristianQuests
     {
-        QuestforSalvation,
-        QuesttofindJesus,
-        QuesttodiscoverTruth,
-        QuestforKnowledge,
-        QuestoftheFruitoftheSpirit
+        QuestForSalvation,
+        QuestToFindJesus,
+        QuestToDiscoverTruth,
+        QuestForKnowledge,
+        QuestOfTheFruitOfTheSpirit
     }
 
     internal class ChristianVirtueSystem

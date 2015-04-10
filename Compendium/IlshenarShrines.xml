@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <CompendiumArticle>
-  <Name>ShardTravelTokuno</Name>
+  <Name>IlshenarShrines</Name>
  <Element>
   <ElementName>DarkGreyBorder</ElementName>
   <Type>BackgroundElement</Type>
@@ -36,7 +36,7 @@
   <X>206</X>
   <Y>417</Y>
   <Z>4</Z>
- <Text>Tokuno Islands</Text>
+ <Text>Ilshenar Shrines</Text>
  <Width>100</Width>
  <Height>40</Height>
  <Background>False</Background>
@@ -49,213 +49,175 @@
   <Y>30</Y>
   <Z>3</Z>
  <Hue>0</Hue>
- <GumpId>5597</GumpId>
+ <GumpId>5595</GumpId>
  </Element>
  <Element>
-  <ElementName>Isamu-Jima</ElementName>
+  <ElementName>ChaosLabel</ElementName>
   <Type>LabelElement</Type>
-  <X>336</X>
-  <Y>293</Y>
-  <Z>4</Z>
- <Hue>1152</Hue>
- <Text>Isamu-Jima</Text>
- </Element>
- <Element>
-  <ElementName>Isamu-JimaButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>338</X>
-  <Y>283</Y>
-  <Z>4</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>Makoto-Jima</ElementName>
-  <Type>LabelElement</Type>
-  <X>261</X>
-  <Y>339</Y>
+  <X>276</X>
+  <Y>60</Y>
   <Z>5</Z>
  <Hue>1152</Hue>
- <Text>Makoto-Jima</Text>
+ <Text>Chaos</Text>
  </Element>
  <Element>
-  <ElementName>Makoto-JimaButton</ElementName>
+  <ElementName>Chaos</ElementName>
   <Type>ButtonElement</Type>
-  <X>243</X>
-  <Y>343</Y>
-  <Z>5</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>Homare-Jima</ElementName>
-  <Type>LabelElement</Type>
-  <X>59</X>
-  <Y>199</Y>
-  <Z>6</Z>
- <Hue>1152</Hue>
- <Text>Homare-Jima</Text>
- </Element>
- <Element>
-  <ElementName>Homare-JimaButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>102</X>
-  <Y>186</Y>
+  <X>311</X>
+  <Y>73</Y>
   <Z>6</Z>
  <GumpLink></GumpLink>
  <PressedId>1209</PressedId>
  <NormalId>1210</NormalId>
  </Element>
  <Element>
-  <ElementName>Bushido</ElementName>
+  <ElementName>CompassionLabel</ElementName>
   <Type>LabelElement</Type>
-  <X>80</X>
-  <Y>111</Y>
-  <Z>7</Z>
+  <X>187</X>
+  <Y>104</Y>
+  <Z>5</Z>
  <Hue>1152</Hue>
- <Text>Bushido Dojo</Text>
+ <Text>Compassion</Text>
  </Element>
  <Element>
-  <ElementName>BushidoButton</ElementName>
+  <ElementName>Compassion</ElementName>
+  <Type>ButtonElement</Type>
+  <X>237</X>
+  <Y>123</Y>
+  <Z>6</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>HonestyLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>127</X>
+  <Y>325</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Honesty</Text>
+ </Element>
+ <Element>
+  <ElementName>Honesty</ElementName>
+  <Type>ButtonElement</Type>
+  <X>152</X>
+  <Y>345</Y>
+  <Z>6</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>HonorLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>122</X>
+  <Y>179</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Honor</Text>
+ </Element>
+ <Element>
+  <ElementName>Honor</ElementName>
+  <Type>ButtonElement</Type>
+  <X>156</X>
+  <Y>195</Y>
+  <Z>6</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>HumilityLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>65</X>
+  <Y>273</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Humility</Text>
+ </Element>
+ <Element>
+  <ElementName>Humility</ElementName>
+  <Type>ButtonElement</Type>
+  <X>77</X>
+  <Y>261</Y>
+  <Z>6</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>JusticeLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>182</X>
+  <Y>234</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Justice</Text>
+ </Element>
+ <Element>
+  <ElementName>Justice</ElementName>
+  <Type>ButtonElement</Type>
+  <X>193</X>
+  <Y>252</Y>
+  <Z>6</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>SacrificeLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>205</X>
+  <Y>312</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Sacrifice</Text>
+ </Element>
+ <Element>
+  <ElementName>Sacrifice</ElementName>
+  <Type>ButtonElement</Type>
+  <X>224</X>
+  <Y>330</Y>
+  <Z>6</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>SpiritualityLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>295</X>
+  <Y>337</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Spirituality</Text>
+ </Element>
+ <Element>
+  <ElementName>Spirituality</ElementName>
+  <Type>ButtonElement</Type>
+  <X>278</X>
+  <Y>340</Y>
+  <Z>6</Z>
+ <GumpLink></GumpLink>
+ <PressedId>1209</PressedId>
+ <NormalId>1210</NormalId>
+ </Element>
+ <Element>
+  <ElementName>ValorLabel</ElementName>
+  <Type>LabelElement</Type>
+  <X>81</X>
+  <Y>60</Y>
+  <Z>5</Z>
+ <Hue>1152</Hue>
+ <Text>Valor</Text>
+ </Element>
+ <Element>
+  <ElementName>Valor</ElementName>
   <Type>ButtonElement</Type>
   <X>117</X>
-  <Y>130</Y>
-  <Z>7</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>CraneMarsh</ElementName>
-  <Type>LabelElement</Type>
-  <X>56</X>
-  <Y>313</Y>
-  <Z>8</Z>
- <Hue>1152</Hue>
- <Text>Crane Marsh</Text>
- </Element>
- <Element>
-  <ElementName>CraneMarshButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>86</X>
-  <Y>304</Y>
-  <Z>8</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>FanDancer</ElementName>
-  <Type>LabelElement</Type>
-  <X>309</X>
-  <Y>75</Y>
-  <Z>9</Z>
- <Hue>1152</Hue>
- <Text>Fan Dancer</Text>
- </Element>
- <Element>
-  <ElementName>FanDancerButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>288</X>
-  <Y>78</Y>
-  <Z>9</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>Desert</ElementName>
-  <Type>LabelElement</Type>
-  <X>163</X>
-  <Y>272</Y>
-  <Z>10</Z>
- <Hue>1152</Hue>
- <Text>Makoto Desert</Text>
- </Element>
- <Element>
-  <ElementName>DesertButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>200</X>
-  <Y>265</Y>
-  <Z>10</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>Zento</ElementName>
-  <Type>LabelElement</Type>
-  <X>184</X>
-  <Y>350</Y>
-  <Z>11</Z>
- <Hue>1152</Hue>
- <Text>Zento</Text>
- </Element>
- <Element>
-  <ElementName>ZentoButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>223</X>
-  <Y>354</Y>
-  <Z>11</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>Castle</ElementName>
-  <Type>LabelElement</Type>
-  <X>232</X>
-  <Y>202</Y>
-  <Z>12</Z>
- <Hue>1152</Hue>
- <Text>Mt. Sho Castle</Text>
- </Element>
- <Element>
-  <ElementName>CastleButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>327</X>
-  <Y>208</Y>
-  <Z>12</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>Citadel</ElementName>
-  <Type>LabelElement</Type>
-  <X>338</X>
-  <Y>232</Y>
-  <Z>13</Z>
- <Hue>1152</Hue>
- <Text>Citadel</Text>
- </Element>
- <Element>
-  <ElementName>CitadelButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>382</X>
-  <Y>235</Y>
-  <Z>13</Z>
- <GumpLink></GumpLink>
- <PressedId>1209</PressedId>
- <NormalId>1210</NormalId>
- </Element>
- <Element>
-  <ElementName>Yomotsu</ElementName>
-  <Type>LabelElement</Type>
-  <X>59</X>
-  <Y>237</Y>
-  <Z>14</Z>
- <Hue>1152</Hue>
- <Text>Yomotsu Mine</Text>
- </Element>
- <Element>
-  <ElementName>YomotsuButton</ElementName>
-  <Type>ButtonElement</Type>
-  <X>97</X>
-  <Y>230</Y>
-  <Z>14</Z>
+  <Y>66</Y>
+  <Z>6</Z>
  <GumpLink></GumpLink>
  <PressedId>1209</PressedId>
  <NormalId>1210</NormalId>
