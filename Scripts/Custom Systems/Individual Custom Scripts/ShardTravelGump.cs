@@ -8,11 +8,40 @@ using Server.Items;
 
 namespace Server.Gumps
 {
+    public class ShardTravelHelp : Gump
+    {
+		public ShardTravelHelp(int x, int y) : base(x, y)
+		{
+			string message = @"As you explore areas around the world, complete quests, and defeat enemies, you will encounter fragments of the Travel Map.
+					
+Use these fragments to discover new map destinations which can be bound to the Map once you have explored them.
+
+Shard Owners may want to include information about any costs they add to the use of the map in this help screen.";
+
+            AddBackground(0, 0, 387, 387, 3000); // Paper Background
+            AddImage(0, 0, 0x15DF); // Border
+			AddHtml(30, 20, 347, 357, Color(message, 0x40), false, true);
+		}
+
+		public string Color( string text, int color )
+		{
+			return String.Format( "<BASEFONT COLOR=#{0:X6}>{1}</BASEFONT>", color, text );
+		}
+	}
+	
     public class ShardTravelGump : Gump
     {
         private int m_Page;
         private Mobile m_From;
         private ShardTravelMap m_TravelMap;
+		
+		// ..... IF YOU WANT TO CHARGE FOR USING THE MAP: Set CHARGE to true
+		private const bool CHARGE = true;
+		// ..... and MAKE SURE LENGTH OF payAmounts == LENGTH OF payTypes
+		private int[] payAmounts = {1, 100};
+		private Type[] payTypes = {typeof(BlackPearl), typeof(Gold)};
+		// ..... and Describe the payment HERE.
+		private const string PAYTHIS = "1 Black Pearl and 100 Gold";
 
         private string[] MapPages = new string[]
         {
@@ -20,8 +49,8 @@ namespace Server.Gumps
             "Felucca Cities", "Felucca Dungeons", "Felucca Moongates", "Felucca Shrines",
             "Ilshenar Cities", "Ilshenar Dungeons", "Ilshenar Shrines",
             "Malas Locations",
-            "Tokuno Moongates", "Tokuno Points of Interest",
-            "TerMur Points of Interest"
+            "Tokuno Moongates", "Tokuno Locations",
+            "TerMur Locations"
         };
 
         private int m_Detail;
@@ -85,14 +114,14 @@ namespace Server.Gumps
                 case 11: // Ilshenar Shrines
                     AddImage(38, 30, 0x15DB);
                     break;
-                case 12: // Malas
+                case 12: // Malas Locations
                     AddImage(38, 30, 0x15DC);
                     break;
-                case 13: // Tokuno Cities
-                case 14: // Tokuno Dungeons
+                case 13: // Tokuno Moongates
+                case 14: // Tokuno Locations
                     AddImage(38, 30, 0x15DD);
                     break;
-                case 15: // TerMur Points of Interest
+                case 15: // TerMur Locations
                     AddImage(38, 30, 0x15DE);
                     break;
             }
@@ -112,7 +141,7 @@ namespace Server.Gumps
                 if (entry.MapIndex == m_Page && (found || GM))
                 {
                     AddButton(entry.XposButton, entry.YposButton, 1210, 1209, entry.Index, Reply, 0);
-                    AddLabel(entry.XposLabel, entry.YposLabel, open ? 0x480: found? 0x777 : 0, entry.Name);
+                    AddLabel(entry.XposLabel, entry.YposLabel, open ? 0x480: found? 0x40 : 0x20, entry.Name);
                 }
             }
 
@@ -139,11 +168,12 @@ namespace Server.Gumps
                         AddLabel(480, 244, 0x2A5, "Explore This");
                     }
                 }
-                if (message.Length > 0)
-                {
-                    AddHtml(434, 284, 120, 170, message, false, false);
-                }
             }
+			if (message.Length > 0)
+			{
+				AddHtml(434, 284, 120, 170, message, false, false);
+			}
+            AddButton(561, 21, 22153, 22155, 4, Reply, 0); // Help Button
         }
 
         public override void OnResponse(NetState sender, RelayInfo info)
@@ -159,6 +189,11 @@ namespace Server.Gumps
                     m_From.SendGump(new ShardTravelGump(m_From, m_Page - 1, X, Y, m_TravelMap));
                 if (id == 3)
                     m_From.SendGump(new ShardTravelGump(m_From, m_Page + 1, X, Y, m_TravelMap));
+                if (id == 4)
+				{
+                    m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y, m_TravelMap));
+                    m_From.SendGump(new ShardTravelHelp(X, Y));
+				}
             }
             else if (id < 10000)
             {
@@ -216,9 +251,21 @@ namespace Server.Gumps
                     }
                     else if (entry.Unlocked || !NonGM)
                     {
+						if (NonGM && CHARGE) // Do not charge GMs - they might complain...
+						{
+							Container pack = m_From.Backpack;
+							if (pack == null || (pack.ConsumeTotal(payTypes, payAmounts) > 0))
+							{
+								if (pack == null) message = "Your pack is null???";
+								else message = string.Format("Using the map to teleport costs {0}.", PAYTHIS);
+								m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y, m_TravelMap, m_Detail, message));
+								return;
+							}
+							// Payment was successful if we reach here ...
+						}
                         m_From.MoveToWorld(p, map);
-                        message = string.Format("You have been moved to X:{0}, Y:{1}, Z:{2}, Map: {3}", p.X, p.Y, p.Z,
-                            map);
+                        message = string.Format("{0} have been moved to X:{1}, Y:{2}, Z:{3}, Map: {4}", 
+							CHARGE ? "You paid " + PAYTHIS + " and" : "You", p.X, p.Y, p.Z, map);
                     }
                 }
                 catch
@@ -413,6 +460,34 @@ namespace Server.Gumps
             }
             return null;
         }
+		
+		public int EntryNum { get { return m_Entries.Count; } }
+		
+		public int Discovered
+		{
+			get
+			{
+				int count = 0;
+				foreach (ShardTravelEntry entry in m_Entries)
+				{
+					if (entry.Discovered) count++;
+				}
+				return count;
+			}
+		}
+		
+		public int Unlocked
+		{
+			get
+			{
+				int count = 0;
+				foreach (ShardTravelEntry entry in m_Entries)
+				{
+					if (entry.Unlocked) count++;
+				}
+				return count;
+			}
+		}
 
         [Constructable]
         public ShardTravelMap() : base(0x14EB)
@@ -431,6 +506,14 @@ namespace Server.Gumps
         {
             from.SendGump(new ShardTravelGump(from, 1, 50, 60, this));
         }
+		
+		public override void AddNameProperties(ObjectPropertyList list)
+		{
+			base.AddNameProperties(list);
+			
+			list.Add("Total Entries: {0}", m_Entries.Count);
+			list.Add("Entries Discovered/Unlocked: {0} / {1}", Discovered, Unlocked);
+		}
 
         public ShardTravelMap(Serial serial)
             : base(serial)
@@ -563,14 +646,12 @@ namespace Server.Gumps
             entries.Add(new ShardTravelEntry(201, 2, "Deceit", new Point3D(4111, 434, 5), Tram, 342, 47, 338, 65));
             entries.Add(new ShardTravelEntry(202, 2, "Despise", new Point3D(1301, 1080, 0), Tram, 85, 114, 131, 121));
             entries.Add(new ShardTravelEntry(203, 2, "Destard", new Point3D(1176, 2640, 2), Tram, 118, 289, 118, 273));
-            entries.Add(new ShardTravelEntry(204, 2, "Fire", new Point3D(2923, 3409, 8), Tram, 221, 330, 247, 336));
+            entries.Add(new ShardTravelEntry(204, 2, "Fire", new Point3D(2923, 3409, 6), Tram, 221, 330, 247, 336));
             entries.Add(new ShardTravelEntry(205, 2, "Hythloth", new Point3D(4721, 3824, 0), Tram, 328, 377, 382, 377));
             entries.Add(new ShardTravelEntry(206, 2, "Ice", new Point3D(1999, 81, 4), Tram, 152, 33, 172, 33));
-            entries.Add(new ShardTravelEntry(207, 2, "Orc Caves", new Point3D(1017, 1429, 0), Tram, 120, 151, 104, 156));
-            entries.Add(new ShardTravelEntry(208, 2, "Sanctuary", new Point3D(759, 1642, 0), Tram, 94, 182, 91, 172));
-            entries.Add(new ShardTravelEntry(209, 2, "Shame", new Point3D(511, 1565, 0), Tram, 46, 150, 70, 169));
-            entries.Add(new ShardTravelEntry(210, 2, "Solen Hive", new Point3D(2607, 763, 0), Tram, 140, 81, 160, 101));
-            entries.Add(new ShardTravelEntry(211, 2, "Wrong", new Point3D(2043, 238, 10), Tram, 198, 53, 182, 55));
+            entries.Add(new ShardTravelEntry(207, 2, "Sanctuary", new Point3D(759, 1642, 0), Tram, 94, 182, 91, 172));
+            entries.Add(new ShardTravelEntry(208, 2, "Shame", new Point3D(511, 1565, 0), Tram, 46, 150, 70, 169));
+            entries.Add(new ShardTravelEntry(209, 2, "Wrong", new Point3D(2043, 238, 10), Tram, 198, 53, 182, 55));
 
             // Felucca Dungeons
             entries.Add(new ShardTravelEntry(600, 6, "Covetous", new Point3D(2498, 921, 0), Fel, 239, 107, 223, 110));
@@ -580,11 +661,9 @@ namespace Server.Gumps
             entries.Add(new ShardTravelEntry(604, 6, "Fire", new Point3D(2923, 3409, 8), Fel, 221, 330, 247, 336));
             entries.Add(new ShardTravelEntry(605, 6, "Hythloth", new Point3D(4721, 3824, 0), Fel, 328, 377, 382, 377));
             entries.Add(new ShardTravelEntry(606, 6, "Ice", new Point3D(1999, 81, 4), Fel, 152, 33, 172, 33));
-            entries.Add(new ShardTravelEntry(607, 6, "Orc Caves", new Point3D(1017, 1429, 0), Fel, 120, 151, 104, 156));
-            entries.Add(new ShardTravelEntry(608, 6, "Sanctuary", new Point3D(759, 1642, 0), Fel, 94, 182, 91, 172));
-            entries.Add(new ShardTravelEntry(609, 6, "Shame", new Point3D(511, 1565, 0), Fel, 46, 150, 70, 169));
-            entries.Add(new ShardTravelEntry(610, 6, "Solen Hive", new Point3D(2607, 763, 0), Fel, 140, 81, 160, 101));
-            entries.Add(new ShardTravelEntry(611, 6, "Wrong", new Point3D(2043, 238, 10), Fel, 198, 53, 182, 55));
+            entries.Add(new ShardTravelEntry(607, 6, "Sanctuary", new Point3D(759, 1642, 0), Fel, 94, 182, 91, 172));
+            entries.Add(new ShardTravelEntry(608, 6, "Shame", new Point3D(511, 1565, 0), Fel, 46, 150, 70, 169));
+            entries.Add(new ShardTravelEntry(609, 6, "Wrong", new Point3D(2043, 238, 10), Fel, 198, 53, 182, 55));
 
             // Trammel Moongates
             entries.Add(new ShardTravelEntry(300, 3, "Britain", new Point3D(1336, 1997, 5), Tram, 156, 197, 135, 206));
@@ -681,7 +760,7 @@ namespace Server.Gumps
             entries.Add(new ShardTravelEntry(1301, 13, "Makoto-Jima", new Point3D(802, 1204, 25), Tok, 261, 339, 243, 343));
             entries.Add(new ShardTravelEntry(1302, 13, "Homare-Jima", new Point3D(270, 628, 15), Tok, 59, 199, 102, 186));
 
-            // Tokuno Points
+            // Tokuno Locations
             entries.Add(new ShardTravelEntry(1400, 14, "Crane Marsh", new Point3D(203, 985, 18), Tok, 56, 313, 86, 304));
             entries.Add(new ShardTravelEntry(1401, 14, "Fan Dancer's Dojo", new Point3D(970, 222, 23),
                 Tok, 309, 75, 288, 78));
@@ -710,6 +789,7 @@ namespace Server.Gumps
     {
         private Map m_Map;
         private int m_Index;
+		private string m_LocDesc;
 
         [CommandProperty(AccessLevel.GameMaster)]
         public Map MapSource
@@ -726,7 +806,7 @@ namespace Server.Gumps
         }
 
         [CommandProperty(AccessLevel.GameMaster)]
-        public bool Unused
+        public bool UnSet
         {
             get { return m_Index == 0; }
             set { m_Index = value ? 0 : -1; }
@@ -740,22 +820,36 @@ namespace Server.Gumps
 
         [Constructable]
         public ShardTravelMapPiece(Map map)
-            : this(map, 0)
+            : this(map, 0, "")
         {
         }
 
         [Constructable]
-        public ShardTravelMapPiece(Map map, int index)
+        public ShardTravelMapPiece(Map map, int index, string description)
             : base(0x14ED)
         {
             m_Map = map;
             m_Index = index;
+			m_LocDesc = description;
         }
 
         public override string DefaultName
         {
             get { return string.Format("a travel map fragment"); }
         }
+		
+		public override void AddNameProperties(ObjectPropertyList list)
+		{
+			base.AddNameProperties(list);
+			if (UnSet)
+			{
+				list.Add("Somewhere in {0}", m_Map);
+			}
+			else
+			{
+				list.Add("{0}", m_LocDesc);
+			}
+		}
 
         public override void OnDoubleClick(Mobile from)
         {
@@ -775,7 +869,7 @@ namespace Server.Gumps
                 return;
             }
 
-            if (Unused)
+            if (UnSet)
             {
                 List<ShardTravelEntry> entries = new List<ShardTravelEntry>();
                 foreach (ShardTravelEntry entry in map.Entries)
@@ -788,17 +882,25 @@ namespace Server.Gumps
                 {
                     int token = Utility.Random(entries.Count);
                     m_Index = entries[token].Index; // Pick a random entry and store the Index
-                    map.GetEntry(m_Index).Discovered = true; // Mark the location as discovered (but not unlocked)
-                    from.SendMessage("You note the location of the {0}: {1} for future reference.",
-                        MapNames[map.GetEntry(m_Index).MapIndex], map.GetEntry(m_Index).Name);
                 }
                 else
                 {
                     from.SendMessage("All locations on this map have been discovered.");
                 }
             }
-            from.SendMessage("The fragment crumbles to dust in your hands.");
-            Delete();
+				
+			if (m_Index > 0)
+			{
+				if (map.GetEntry(m_Index).Discovered)
+				{
+					from.SendMessage("You have already discovered this location: {0}.", map.GetEntry(m_Index).Name);
+				}
+				map.GetEntry(m_Index).Discovered = true; // Mark the location as discovered (but not unlocked)
+				from.SendMessage("You note the location of the {0}: {1} for future reference.",
+					MapNames[map.GetEntry(m_Index).MapIndex], map.GetEntry(m_Index).Name);
+				from.SendMessage("The fragment crumbles to dust in your hands.");
+				Delete();
+			}
         }
 
         private string[] MapNames = new string[]
@@ -808,8 +910,8 @@ namespace Server.Gumps
             "Felucca City", "Felucca Dungeon", "Felucca Moongate","Felucca Shrine", 
             "Ilshenar City", "Ilshenar Dungeon", "Ilshenar Shrine", 
             "Malas Location", 
-            "Tokuno Moongate", "Tokuno Point of Interest", 
-            "TerMur Point of Interest"
+            "Tokuno Moongate", "Tokuno Location", 
+            "TerMur Location"
         };
 
         public ShardTravelMapPiece(Serial serial)

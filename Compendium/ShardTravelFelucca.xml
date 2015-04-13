@@ -317,4 +317,14 @@
  <PressedId>1209</PressedId>
  <NormalId>1210</NormalId>
  </Element>
+ <Element>
+  <ElementName>SaveButton</ElementName>
+  <Type>ButtonElement</Type>
+  <X>561</X>
+  <Y>21</Y>
+  <Z>33</Z>
+ <GumpLink></GumpLink>
+ <PressedId>22155</PressedId>
+ <NormalId>22153</NormalId>
+ </Element>
 </CompendiumArticle>

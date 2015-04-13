@@ -97,4 +97,13 @@
  <Hue>0</Hue>
  <GumpId>1263</GumpId>
  </Element>
+ <Element>
+  <ElementName>new Label</ElementName>
+  <Type>LabelElement</Type>
+  <X>182</X>
+  <Y>260</Y>
+  <Z>10</Z>
+ <Hue>1152</Hue>
+ <Text>Human</Text>
+ </Element>
 </CompendiumArticle>
