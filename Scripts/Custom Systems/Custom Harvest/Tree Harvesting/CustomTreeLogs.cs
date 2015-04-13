@@ -3,12 +3,15 @@
  *   can redistribute it and/or modify it under the terms of the GNU GPL. 
  ***************************************************************************/
 
+using System;
+
 namespace Server.Items
 {
     public class AppleTreeLog : CustomTreeLog
     {
         [Constructable]
-        public AppleTreeLog() : base(1)
+        public AppleTreeLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -34,10 +37,11 @@ namespace Server.Items
         }
     }
 
-    public class AshTreeLog : CustomTreeLog 
+    public class AshTreeLog : CustomTreeLog
     {
         [Constructable]
-        public AshTreeLog() : base(1)
+        public AshTreeLog()
+            : base(1, CraftResource.AshWood)
         {
         }
 
@@ -63,10 +67,11 @@ namespace Server.Items
         }
     }
 
-    public class BananaTreeLog : CustomTreeLog 
+    public class BananaTreeLog : CustomTreeLog
     {
         [Constructable]
-        public BananaTreeLog() : base(1)
+        public BananaTreeLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -92,10 +97,11 @@ namespace Server.Items
         }
     }
 
-    public class BlackCherryTreeLog : CustomTreeLog 
+    public class BlackCherryTreeLog : CustomTreeLog
     {
         [Constructable]
-        public BlackCherryTreeLog() : base(1)
+        public BlackCherryTreeLog()
+            : base(1, CraftResource.Bloodwood)
         {
         }
 
@@ -121,10 +127,11 @@ namespace Server.Items
         }
     }
 
-    public class BlackOakTreeLog : CustomTreeLog 
+    public class BlackOakTreeLog : CustomTreeLog
     {
         [Constructable]
-        public BlackOakTreeLog() : base(1)
+        public BlackOakTreeLog()
+            : base(1, CraftResource.OakWood)
         {
         }
 
@@ -150,10 +157,11 @@ namespace Server.Items
         }
     }
 
-    public class CassiaTreeLog : CustomTreeLog 
+    public class CassiaTreeLog : CustomTreeLog
     {
         [Constructable]
-        public CassiaTreeLog() : base(1)
+        public CassiaTreeLog()
+            : base(1, CraftResource.AshWood)
         {
         }
 
@@ -179,10 +187,11 @@ namespace Server.Items
         }
     }
 
-    public class CedarTreeLog : CustomTreeLog 
+    public class CedarTreeLog : CustomTreeLog
     {
         [Constructable]
-        public CedarTreeLog() : base(1)
+        public CedarTreeLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -208,10 +217,11 @@ namespace Server.Items
         }
     }
 
-    public class CherryTreeLog : CustomTreeLog 
+    public class CherryTreeLog : CustomTreeLog
     {
         [Constructable]
-        public CherryTreeLog() : base(1)
+        public CherryTreeLog()
+            : base(1, CraftResource.Bloodwood)
         {
         }
 
@@ -237,10 +247,11 @@ namespace Server.Items
         }
     }
 
-    public class CoconutPalmLog : CustomTreeLog 
+    public class CoconutPalmLog : CustomTreeLog
     {
         [Constructable]
-        public CoconutPalmLog() : base(1)
+        public CoconutPalmLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -266,10 +277,11 @@ namespace Server.Items
         }
     }
 
-    public class CypressTreeLog : CustomTreeLog 
+    public class CypressTreeLog : CustomTreeLog
     {
         [Constructable]
-        public CypressTreeLog() : base(1)
+        public CypressTreeLog()
+            : base(1, CraftResource.Frostwood)
         {
         }
 
@@ -295,10 +307,11 @@ namespace Server.Items
         }
     }
 
-    public class DatePalmLog : CustomTreeLog 
+    public class DatePalmLog : CustomTreeLog
     {
         [Constructable]
-        public DatePalmLog() : base(1)
+        public DatePalmLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -324,10 +337,11 @@ namespace Server.Items
         }
     }
 
-    public class DogwoodTreeLog : CustomTreeLog 
+    public class DogwoodTreeLog : CustomTreeLog
     {
         [Constructable]
-        public DogwoodTreeLog() : base(1)
+        public DogwoodTreeLog()
+            : base(1, CraftResource.OakWood)
         {
         }
 
@@ -353,10 +367,11 @@ namespace Server.Items
         }
     }
 
-    public class EucalyptusTreeLog : CustomTreeLog 
+    public class EucalyptusTreeLog : CustomTreeLog
     {
         [Constructable]
-        public EucalyptusTreeLog() : base(1)
+        public EucalyptusTreeLog()
+            : base(1, CraftResource.Frostwood)
         {
         }
 
@@ -382,10 +397,11 @@ namespace Server.Items
         }
     }
 
-    public class FigTreeLog : CustomTreeLog 
+    public class FigTreeLog : CustomTreeLog
     {
         [Constructable]
-        public FigTreeLog() : base(1)
+        public FigTreeLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -411,10 +427,11 @@ namespace Server.Items
         }
     }
 
-    public class HickoryTreeLog : CustomTreeLog 
+    public class HickoryTreeLog : CustomTreeLog
     {
         [Constructable]
-        public HickoryTreeLog() : base(1)
+        public HickoryTreeLog()
+            : base(1, CraftResource.Bloodwood)
         {
         }
 
@@ -440,10 +457,11 @@ namespace Server.Items
         }
     }
 
-    public class IronwoodTreeLog : CustomTreeLog 
+    public class IronwoodTreeLog : CustomTreeLog
     {
         [Constructable]
-        public IronwoodTreeLog() : base(1)
+        public IronwoodTreeLog()
+            : base(1, CraftResource.Frostwood)
         {
         }
 
@@ -469,10 +487,11 @@ namespace Server.Items
         }
     }
 
-    public class JuniperBushLog : CustomTreeLog 
+    public class JuniperBushLog : CustomTreeLog
     {
         [Constructable]
-        public JuniperBushLog() : base(1)
+        public JuniperBushLog()
+            : base(1, CraftResource.RegularWood)
         {
         }
 
@@ -498,10 +517,11 @@ namespace Server.Items
         }
     }
 
-    public class MapleTreeLog : CustomTreeLog 
+    public class MapleTreeLog : CustomTreeLog
     {
         [Constructable]
-        public MapleTreeLog() : base(1)
+        public MapleTreeLog()
+            : base(1, CraftResource.RegularWood)
         {
         }
 
@@ -527,10 +547,11 @@ namespace Server.Items
         }
     }
 
-    public class OakTreeLog : CustomTreeLog 
+    public class OakTreeLog : CustomTreeLog
     {
         [Constructable]
-        public OakTreeLog() : base(1)
+        public OakTreeLog()
+            : base(1, CraftResource.OakWood)
         {
         }
 
@@ -556,10 +577,11 @@ namespace Server.Items
         }
     }
 
-    public class OhiiTreeLog : CustomTreeLog 
+    public class OhiiTreeLog : CustomTreeLog
     {
         [Constructable]
-        public OhiiTreeLog() : base(1)
+        public OhiiTreeLog()
+            : base(1, CraftResource.Frostwood)
         {
         }
 
@@ -585,10 +607,11 @@ namespace Server.Items
         }
     }
 
-    public class OliveTreeLog : CustomTreeLog 
+    public class OliveTreeLog : CustomTreeLog
     {
         [Constructable]
-        public OliveTreeLog() : base(1)
+        public OliveTreeLog()
+            : base(1, CraftResource.Bloodwood)
         {
         }
 
@@ -614,10 +637,11 @@ namespace Server.Items
         }
     }
 
-    public class PeachTreeLog : CustomTreeLog 
+    public class PeachTreeLog : CustomTreeLog
     {
         [Constructable]
-        public PeachTreeLog() : base(1)
+        public PeachTreeLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -643,10 +667,11 @@ namespace Server.Items
         }
     }
 
-    public class PearTreeLog : CustomTreeLog 
+    public class PearTreeLog : CustomTreeLog
     {
         [Constructable]
-        public PearTreeLog() : base(1)
+        public PearTreeLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -672,10 +697,11 @@ namespace Server.Items
         }
     }
 
-    public class PipeCactusLog : CustomTreeLog 
+    public class PipeCactusLog : CustomTreeLog
     {
         [Constructable]
-        public PipeCactusLog() : base(1)
+        public PipeCactusLog()
+            : base(1, CraftResource.Frostwood)
         {
         }
 
@@ -701,10 +727,11 @@ namespace Server.Items
         }
     }
 
-    public class PlumTreeLog : CustomTreeLog 
+    public class PlumTreeLog : CustomTreeLog
     {
         [Constructable]
-        public PlumTreeLog() : base(1)
+        public PlumTreeLog()
+            : base(1, CraftResource.Bloodwood)
         {
         }
 
@@ -730,10 +757,11 @@ namespace Server.Items
         }
     }
 
-    public class PoplarTreeLog : CustomTreeLog 
+    public class PoplarTreeLog : CustomTreeLog
     {
         [Constructable]
-        public PoplarTreeLog() : base(1)
+        public PoplarTreeLog()
+            : base(1, CraftResource.AshWood)
         {
         }
 
@@ -759,10 +787,11 @@ namespace Server.Items
         }
     }
 
-    public class SandalwoodTreeLog : CustomTreeLog 
+    public class SandalwoodTreeLog : CustomTreeLog
     {
         [Constructable]
-        public SandalwoodTreeLog() : base(1)
+        public SandalwoodTreeLog()
+            : base(1, CraftResource.Frostwood)
         {
         }
 
@@ -788,10 +817,11 @@ namespace Server.Items
         }
     }
 
-    public class SpiderTreeLog : CustomTreeLog 
+    public class SpiderTreeLog : CustomTreeLog
     {
         [Constructable]
-        public SpiderTreeLog() : base(1)
+        public SpiderTreeLog()
+            : base(1, CraftResource.OakWood)
         {
         }
 
@@ -817,10 +847,11 @@ namespace Server.Items
         }
     }
 
-    public class TuscanyPineTreeLog : CustomTreeLog 
+    public class TuscanyPineTreeLog : CustomTreeLog
     {
         [Constructable]
-        public TuscanyPineTreeLog() : base(1)
+        public TuscanyPineTreeLog()
+            : base(1, CraftResource.Frostwood)
         {
         }
 
@@ -846,10 +877,11 @@ namespace Server.Items
         }
     }
 
-    public class WalnutTreeLog : CustomTreeLog 
+    public class WalnutTreeLog : CustomTreeLog
     {
         [Constructable]
-        public WalnutTreeLog() : base(1)
+        public WalnutTreeLog()
+            : base(1, CraftResource.Heartwood)
         {
         }
 
@@ -875,10 +907,11 @@ namespace Server.Items
         }
     }
 
-    public class WhiteBeechTreeLog : CustomTreeLog 
+    public class WhiteBeechTreeLog : CustomTreeLog
     {
         [Constructable]
-        public WhiteBeechTreeLog() : base(1)
+        public WhiteBeechTreeLog()
+            : base(1, CraftResource.AshWood)
         {
         }
 
@@ -904,10 +937,11 @@ namespace Server.Items
         }
     }
 
-    public class WillowTreeLog : CustomTreeLog 
+    public class WillowTreeLog : CustomTreeLog
     {
         [Constructable]
-        public WillowTreeLog() : base(1)
+        public WillowTreeLog()
+            : base(1, CraftResource.AshWood)
         {
         }
 
@@ -933,10 +967,11 @@ namespace Server.Items
         }
     }
 
-    public class YewTreeLog : CustomTreeLog 
+    public class YewTreeLog : CustomTreeLog
     {
         [Constructable]
-        public YewTreeLog() : base(1)
+        public YewTreeLog()
+            : base(1, CraftResource.AshWood)
         {
         }
 
@@ -962,10 +997,10 @@ namespace Server.Items
         }
     }
 
-    public class YuccaPlantLog : CustomTreeLog 
+    public class YuccaPlantLog : CustomTreeLog
     {
         [Constructable]
-        public YuccaPlantLog() : base(1)
+        public YuccaPlantLog() : base(1, CraftResource.AshWood)
         {
         }
 
@@ -991,11 +1026,44 @@ namespace Server.Items
         }
     }
 
-    public class CustomTreeLog : Log
+    public class CustomTreeLog : BaseLog
     {
+        public double MinSkill
+        {
+            get
+            {
+                switch (Resource)
+                {
+                    case CraftResource.Bloodwood:
+                    case CraftResource.Frostwood:
+                    case CraftResource.Heartwood:
+                        return 85.0;
+                    case CraftResource.YewWood:
+                        return 60.0;
+                    case CraftResource.AshWood:
+                        return 45.0;
+                    case CraftResource.OakWood:
+                        return 30.0;
+                }
+                return 0.0;
+            }
+        }
+
+        [Constructable]
+        public CustomTreeLog()
+            : this(1)
+        {
+        }
+
         [Constructable]
         public CustomTreeLog(int amount)
-            : base(amount)
+            : this(amount, CraftResource.RegularWood)
+        {
+        }
+
+        [Constructable]
+        public CustomTreeLog(int amount, CraftResource resource)
+            : base(resource, amount)
         {
         }
 

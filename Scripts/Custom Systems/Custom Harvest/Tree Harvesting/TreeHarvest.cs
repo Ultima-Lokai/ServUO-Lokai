@@ -2158,6 +2158,47 @@ namespace Server.Engines.Harvest
 
         public override void OnBadHarvestTarget(Mobile from, Item tool, object toHarvest)
         {
+            if (tool is TreeHatchet)
+            {
+                if (toHarvest is CustomTreeLog)
+                {
+                    Item boards = null;
+                    CustomTreeLog log = (CustomTreeLog) toHarvest;
+                    switch (log.Resource)
+                    {
+                        case CraftResource.Bloodwood:
+                            boards = new BloodwoodBoard(log.Amount);
+                            break;
+                        case CraftResource.Frostwood:
+                            boards = new FrostwoodBoard(log.Amount);
+                            break;
+                        case CraftResource.Heartwood:
+                            boards = new HeartwoodBoard(log.Amount);
+                            break;
+                        case CraftResource.YewWood:
+                            boards = new YewBoard(log.Amount);
+                            break;
+                        case CraftResource.AshWood:
+                            boards = new AshBoard(log.Amount);
+                            break;
+                        case CraftResource.OakWood:
+                            boards = new OakBoard(log.Amount);
+                            break;
+                        case CraftResource.RegularWood:
+                            boards = new Board(log.Amount);
+                            break;
+                    }
+                    if (boards != null)
+                    {
+                        if (Give(from, boards, true))
+                        {
+                            log.Delete();
+                            from.SendMessage("You convert the logs into boards.");
+                            return;
+                        }
+                    }
+                }
+            }
             from.SendMessage("You cannot harvest anything there using {0}.", tool.Name);
         }
 
@@ -2240,7 +2281,7 @@ namespace Server.Engines.Harvest
                         Item logs = Activator.CreateInstance((Type) def.DoubleHarvestMessage) as Item;
                         if (logs is CustomTreeLog)
                         {
-                            rating = from.CheckSkill(SkillName.Lumberjacking, 0.0, 100.0)
+                            rating = from.CheckSkill(SkillName.Lumberjacking, ((CustomTreeLog)logs).MinSkill, 100.0)
                                 ? Utility.RandomBool()
                                     ? HarvestSuccessRating.PartialSuccess
                                     : HarvestSuccessRating.Success

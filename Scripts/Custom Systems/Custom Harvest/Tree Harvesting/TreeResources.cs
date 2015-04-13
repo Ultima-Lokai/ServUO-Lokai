@@ -46,7 +46,7 @@ namespace Server.Items
         public virtual void Resource_OnTarget(Mobile from, object targ)
         {
             SkillName brewSkill = SkillName.Alchemy;
-            SkillName herbSkill = SkillName.Lumberjacking;
+            SkillName herbSkill = SkillName.Cooking;
 
             if (this.grindable)
             {
