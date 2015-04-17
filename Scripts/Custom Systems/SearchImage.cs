@@ -30,16 +30,11 @@
  *
  ***************************************************************************/
 using System;
-using Server;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using Server.Commands;
 using Server.Targeting;
-using Server.Misc;
 using Server.Items;
 using Server.Gumps;
-using Server.Multis;
 using Server.Network;
 
 namespace Server.Custom

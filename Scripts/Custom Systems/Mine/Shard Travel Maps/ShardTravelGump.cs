@@ -1,6 +1,15 @@
-﻿using System;
+﻿/**************************** ShardTravelGump.cs *******************************************************************************
+ *
+ *					(C) 2015, by Lokai
+ *   
+/*******************************************************************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License 
+ *   as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+ *
+ ******************************************************************************************************************************/
+using System;
 using System.Collections.Generic;
-using Server.Commands;
 using Server.Mobiles;
 using Server.Network;
 using Server.Spells;
@@ -8,27 +17,6 @@ using Server.Items;
 
 namespace Server.Gumps
 {
-    public class ShardTravelHelp : Gump
-    {
-		public ShardTravelHelp(int x, int y) : base(x, y)
-		{
-			string message = @"As you explore areas around the world, complete quests, and defeat enemies, you will encounter fragments of the Travel Map.
-					
-Use these fragments to discover new map destinations which can be bound to the Map once you have explored them.
-
-Shard Owners may want to include information about any costs they add to the use of the map in this help screen.";
-
-            AddBackground(0, 0, 387, 387, 3000); // Paper Background
-            AddImage(0, 0, 0x15DF); // Border
-			AddHtml(30, 20, 347, 357, Color(message, 0x40), false, true);
-		}
-
-		public string Color( string text, int color )
-		{
-			return String.Format( "<BASEFONT COLOR=#{0:X6}>{1}</BASEFONT>", color, text );
-		}
-	}
-	
     public class ShardTravelGump : Gump
     {
         private int m_Page;
@@ -192,7 +180,7 @@ Shard Owners may want to include information about any costs they add to the use
                 if (id == 4)
 				{
                     m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y, m_TravelMap));
-                    m_From.SendGump(new ShardTravelHelp(X, Y));
+                    m_From.SendGump(new MapTravelHelp(X, Y));
 				}
             }
             else if (id < 10000)
@@ -215,41 +203,7 @@ Shard Owners may want to include information about any costs they add to the use
                     p = entry.Destination;
                     map = entry.Map;
 
-                    if (NonGM && Factions.Sigil.ExistsOn(m_From))
-                    {
-                        m_From.SendLocalizedMessage(1061632); // You can't do that while carrying the sigil.
-                    }
-                    else if (NonGM && map == Map.Felucca && m_From is PlayerMobile && ((PlayerMobile) m_From).Young)
-                    {
-                        m_From.SendLocalizedMessage(1049543);
-                        // You decide against traveling to Felucca while you are still young.
-                    }
-                    else if (NonGM && m_From.Kills >= 5 && map != Map.Felucca)
-                    {
-                        m_From.SendLocalizedMessage(1019004); // You are not allowed to travel there.
-                    }
-                    else if (NonGM && m_From.Criminal)
-                    {
-                        m_From.SendLocalizedMessage(1005561, "", 0x22);
-                        // Thou'rt a criminal and cannot escape so easily.
-                    }
-                    else if (NonGM && SpellHelper.CheckCombat(m_From))
-                    {
-                        m_From.SendLocalizedMessage(1005564, "", 0x22); // Wouldst thou flee during the heat of battle??
-                    }
-                    else if (NonGM && Misc.WeightOverloading.IsOverloaded(m_From))
-                    {
-                        m_From.SendLocalizedMessage(502359, "", 0x22); // Thou art too encumbered to move.
-                    }
-                    else if (!map.CanSpawnMobile(p.X, p.Y, p.Z))
-                    {
-                        m_From.SendLocalizedMessage(501942); // That location is blocked.
-                    }
-                    else if (m_From.Holding != null)
-                    {
-                        m_From.SendLocalizedMessage(1071955); // You cannot teleport while dragging an object.
-                    }
-                    else if (entry.Unlocked || !NonGM)
+                    if (MapTravelHelp.CanTravel(m_From, map, p) && (entry.Unlocked || !NonGM) && m_TravelMap.Parent == m_From.Backpack)
                     {
 						if (NonGM && CHARGE) // Do not charge GMs - they might complain...
 						{
@@ -295,42 +249,14 @@ Shard Owners may want to include information about any costs they add to the use
                     if (m_From.InRange(p, 7))
                     {
                         entry.Unlocked = true;
+                        entry.Discovered = true; // We do this in case a GM unlocked the location before it was discovered.
                         message = string.Format("You have unlocked a new location: {0}.", entry.Name);
                     }
                     else
                     {
                         int distance = (int) m_From.GetDistanceToSqrt(p);
-                        Direction d = m_From.GetDirectionTo(p);
-                        string direction = "... You can't tell in what direction it lies.";
-                        switch (d)
-                        {
-                            case Direction.Down:
-                                direction = "South East";
-                                break;
-                            case Direction.East:
-                                direction = "East";
-                                break;
-                            case Direction.Left:
-                                direction = "South West";
-                                break;
-                            case Direction.North:
-                                direction = "North";
-                                break;
-                            case Direction.Right:
-                                direction = "North East";
-                                break;
-                            case Direction.South:
-                                direction = "South";
-                                break;
-                            case Direction.Up:
-                                direction = "North West";
-                                break;
-                            case Direction.West:
-                                direction = "West";
-                                break;
-                        }
                         message = string.Format("That location is still approximately {0} paces to the {1}.",
-                            distance, direction);
+                            distance, MapTravelHelp.GetDirection(m_From, p));
                     }
                 }
                 m_From.SendGump(new ShardTravelGump(m_From, m_Page, X, Y, m_TravelMap, m_Detail, message));
@@ -418,7 +344,8 @@ Shard Owners may want to include information about any costs they add to the use
         }
 
         public ShardTravelEntry(int index, int mapindex, string name, Point3D p, Map map, int xposlabel, int yposlabel,
-            int xposbutton, int yposbutton) : this(index, mapindex, name, p, map, xposlabel, yposlabel, xposbutton,
+            int xposbutton, int yposbutton)
+            : this(index, mapindex, name, p, map, xposlabel, yposlabel, xposbutton,
                 yposbutton, false, false)
         {
         }
@@ -504,15 +431,17 @@ Shard Owners may want to include information about any costs they add to the use
 
         public override void OnDoubleClick(Mobile from)
         {
-            from.SendGump(new ShardTravelGump(from, 1, 50, 60, this));
+            if (Parent == from.Backpack)
+                from.SendGump(new ShardTravelGump(from, 1, 50, 60, this));
+            else
+                from.SendMessage("That must be in your pack to use it.");
         }
-		
-		public override void AddNameProperties(ObjectPropertyList list)
+
+        public override void AddNameProperties(ObjectPropertyList list)
 		{
 			base.AddNameProperties(list);
-			
-			list.Add("Total Entries: {0}", m_Entries.Count);
-			list.Add("Entries Discovered/Unlocked: {0} / {1}", Discovered, Unlocked);
+
+            list.Add("Total Entries: {0}.\nEntries Discovered: {1}.\nEntries Unlocked: {2}.", m_Entries.Count, Discovered, Unlocked);
 		}
 
         public ShardTravelMap(Serial serial)
@@ -853,14 +782,20 @@ Shard Owners may want to include information about any costs they add to the use
 
         public override void OnDoubleClick(Mobile from)
         {
+            Container pack = from.Backpack;
+            if (pack == null) return;
+
+            if (Parent != pack)
+            {
+                from.SendMessage("That must be in your pack to use it.");
+                return;
+            }
+
             if (from.Map != MapSource)
             {
                 from.SendMessage("You must be in {0} to use this map fragment.", MapSource.Name);
                 return;
             }
-
-            Container pack = from.Backpack;
-            if (pack == null) return;
 
             ShardTravelMap map = pack.FindItemByType<ShardTravelMap>();
             if (map == null)
